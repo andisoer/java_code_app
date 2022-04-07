@@ -95,7 +95,7 @@ class ApiService {
   Future<MenuResult> fetchMenuByCategory(
       {required String token, required String category}) async {
     final response = await http.get(
-      Uri.parse(_baseUrl + 'kategori/' + category),
+      Uri.parse(_baseUrl + 'menu/kategori/' + category),
       headers: {
         "token": token,
       },
@@ -116,7 +116,7 @@ class ApiService {
         "token": token,
       },
     );
-    
+
     if (response.statusCode == 200) {
       return MenuDetailResult.fromJson(json.decode(response.body));
     } else {

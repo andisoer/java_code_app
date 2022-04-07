@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:java_code_app/data/model/menu_category.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/promo_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
-import 'package:java_code_app/widget/item_menu.dart';
+import 'package:java_code_app/widget/item_list_all_menu.dart';
 import 'package:java_code_app/widget/item_promo.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -19,6 +20,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<MenuCategory> categoryList = [
+    MenuCategory('Semua Makanan', 'assets/images/list.png', true, 'all'),
+    MenuCategory('Makanan', 'assets/images/food_white.png', true, 'makanan'),
+    MenuCategory('Minuman', 'assets/images/coffe_white.png', true, 'minuman')
+  ];
+
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,43 +86,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     _buildPromoList(context),
                     _buildCategoryList(),
-                    _buildCategoryTitle('Makanan'),
-                    Consumer<MenuProvider>(
-                      builder: (context, state, _) {
-                        if (state.resourceState == MenuResourceState.hasData) {
-                          return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return buildItemMenu(
-                                context,
-                                state.menuResult.data[index],
-                              );
-                            },
-                            itemCount: state.menuResult.data.length,
-                          );
-                        } else if (state.resourceState ==
-                            MenuResourceState.noData) {
-                          return Text('empty');
-                        } else if (state.resourceState ==
-                            MenuResourceState.error) {
-                          return Text('error');
-                        } else if (state.resourceState ==
-                            MenuResourceState.loading) {
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                _buildMenuShimmer(),
-                                _buildMenuShimmer(),
-                                _buildMenuShimmer(),
-                              ],
-                            ),
-                          );
-                        } else {
-                          return Text('something wrong');
-                        }
-                      },
-                    )
+                    _buildMenuList()
                   ],
                 ),
               ),
@@ -124,42 +97,103 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container _buildCategoryTitle(String title) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      child: Row(
-        children: [
-          Image.asset('assets/images/food_primary.png'),
-          Container(
-            margin: const EdgeInsets.only(left: 8),
-            child: Text(
-              title,
-              style: GoogleFonts.montserrat(
-                color: primaryColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-              ),
+  Consumer<MenuProvider> _buildMenuList() {
+    return Consumer<MenuProvider>(
+      builder: (context, state, _) {
+        if (state.resourceState == MenuResourceState.hasData) {
+          List<MenuListItem> allMenuList = [];
+          List<MenuListItem> foodMenuList = [];
+          List<MenuListItem> drinkMenuList = [];
+        
+          for (int i = 0; i < state.menuResult.data.length; i++) {
+            var item = state.menuResult.data[i];
+            if (item.kategori == 'makanan') {
+              foodMenuList.add(
+                MenuItem(
+                  state.menuResult.data[i],
+                ),
+              );
+            } else {
+              drinkMenuList.add(
+                MenuItem(
+                  state.menuResult.data[i],
+                ),
+              );
+            }
+          }
+
+          if (foodMenuList.isNotEmpty) {
+            foodMenuList.insert(0,
+                MenuCategoryItem('Makanan', 'assets/images/food_primary.png'));
+          }
+
+          if (drinkMenuList.isNotEmpty) {
+            drinkMenuList.insert(0,
+                MenuCategoryItem('Minuman', 'assets/images/coffe_primary.png'));
+          }
+
+          allMenuList.addAll(foodMenuList);
+          allMenuList.addAll(drinkMenuList);
+
+          return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final item = allMenuList[index];
+              return item.buildItemWidget(context);
+            },
+            itemCount: allMenuList.length,
+          );
+        } else if (state.resourceState == MenuResourceState.noData) {
+          return const Text('empty');
+        } else if (state.resourceState == MenuResourceState.error) {
+          return const Text('error');
+        } else if (state.resourceState == MenuResourceState.loading) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildMenuShimmer(),
+                _buildMenuShimmer(),
+                _buildMenuShimmer(),
+              ],
             ),
-          )
-        ],
-      ),
+          );
+        } else {
+          return const Text('something wrong');
+        }
+      },
     );
   }
 
-  SingleChildScrollView _buildCategoryList() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: Row(
-          children: [
-            _buildCategoryItem('Semua Menu', true, 'assets/images/list.png'),
-            _buildCategoryItem(
-                'Makanan', false, 'assets/images/food_white.png'),
-            _buildCategoryItem(
-                'Minuman', false, 'assets/images/coffe_white.png'),
-          ],
-        ),
+  Container _buildCategoryList() {
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 8),
+      child: ListView.builder(
+        clipBehavior: Clip.none,
+        shrinkWrap: true,
+        itemCount: categoryList.length,
+        itemBuilder: (context, index) {
+          final item = categoryList[index];
+          return InkWell(
+            onTap: () {
+              setState(() {
+                selectedIndex = index;
+              });
+
+              var type = item.slug;
+              Provider.of<MenuProvider>(context, listen: false).fetchMenu(
+                type: type,
+              );
+            },
+            child: _buildCategoryItem(
+              item.name,
+              selectedIndex == index ? true : false,
+              item.assetImage,
+            ),
+          );
+        },
+        scrollDirection: Axis.horizontal,
       ),
     );
   }
@@ -221,9 +255,9 @@ class _HomePageState extends State<HomePage> {
               itemCount: state.promoResult.data.length,
             );
           } else if (state.resourceState == ResourceState.noData) {
-            return Text('empty');
+            return const Text('empty');
           } else if (state.resourceState == ResourceState.error) {
-            return Text('error');
+            return const Text('error');
           } else if (state.resourceState == ResourceState.loading) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -237,7 +271,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return Text('something wrong');
+            return const Text('something wrong');
           }
         },
       ),
@@ -362,7 +396,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,
-                      side: BorderSide(
+                      side: const BorderSide(
                         width: 2,
                       ),
                     ),
