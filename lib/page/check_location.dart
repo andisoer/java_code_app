@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:java_code_app/page/bottom_navigation_main.dart';
+import 'package:java_code_app/page/home.dart';
+import 'package:java_code_app/provider/location_provider.dart';
+import 'package:provider/provider.dart';
 
 class CheckLocationPage extends StatefulWidget {
   static const routeName = 'check_location';
@@ -63,15 +67,39 @@ class _CheckLocationPageState extends State<CheckLocationPage> {
                       Container(
                         margin: const EdgeInsets.only(top: 36),
                         child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 1 / 2,
-                            child: Text(
-                              _currentAddress,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            )),
+                          width: MediaQuery.of(context).size.width * 2 / 3,
+                          child: Consumer<LocationProvider>(
+                            builder: (context, state, _) {
+                              if (state.address != null) {
+                                WidgetsBinding.instance?.addPostFrameCallback(
+                                  (timeStamp) {
+                                    Navigator.popAndPushNamed(
+                                      context,
+                                      BottomNavigationMain.routeName,
+                                    );
+                                  },
+                                );
+                                return Text(
+                                  state.address!,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                );
+                              } else {
+                                return Text(
+                                  '-',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -89,35 +117,7 @@ class _CheckLocationPageState extends State<CheckLocationPage> {
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
   _getLocation() {
-    Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high,
-            forceAndroidLocationManager: true)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-        _getAddressFromLatLng();
-      });
-    }).catchError((e) {
-      // ignore: avoid_print
-      print(e);
-    });
-  }
-
-  _getAddressFromLatLng() async {
-    try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          _currentPosition!.latitude, _currentPosition!.longitude);
-
-      Placemark place = placemarks[0];
-
-      setState(() {
-        _currentAddress =
-            "${place.locality}, ${place.postalCode}, ${place.country}";
-      });
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
+    Provider.of<LocationProvider>(context, listen: false).getCurrentLocation();
   }
 
   @override

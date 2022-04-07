@@ -12,6 +12,7 @@ import 'package:java_code_app/page/detail_promo.dart';
 import 'package:java_code_app/page/home.dart';
 import 'package:java_code_app/page/login_page.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
+import 'package:java_code_app/provider/location_provider.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/promo_detail_provider.dart';
@@ -55,17 +56,20 @@ class _MyAppState extends State<MyApp> {
           create: (_) => MenuProvider(
             apiService: ApiService(),
           ),
-        )
+        ),
+        ChangeNotifierProvider(create: (_) => LocationProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute:
-            preferences.isLoggedIn() ? BottomNavigationMain.routeName : LoginPage.routeName,
+        initialRoute: preferences.isLoggedIn()
+            ? CheckLocationPage.routeName
+            : LoginPage.routeName,
         routes: {
-          BottomNavigationMain.routeName: (context) => const BottomNavigationMain(),
+          BottomNavigationMain.routeName: (context) =>
+              const BottomNavigationMain(),
           LoginPage.routeName: (context) => const LoginPage(),
           CheckLocationPage.routeName: (context) => const CheckLocationPage(),
           HomePage.routeName: (context) => const HomePage(),
