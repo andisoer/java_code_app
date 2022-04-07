@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/common/navigation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
+import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/check_location.dart';
 import 'package:java_code_app/page/detail_menu.dart';
 import 'package:java_code_app/page/detail_promo.dart';
@@ -62,8 +63,9 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.blue,
         ),
         initialRoute:
-            preferences.isLoggedIn() ? HomePage.routeName : LoginPage.routeName,
+            preferences.isLoggedIn() ? BottomNavigationMain.routeName : LoginPage.routeName,
         routes: {
+          BottomNavigationMain.routeName: (context) => const BottomNavigationMain(),
           LoginPage.routeName: (context) => const LoginPage(),
           CheckLocationPage.routeName: (context) => const CheckLocationPage(),
           HomePage.routeName: (context) => const HomePage(),
