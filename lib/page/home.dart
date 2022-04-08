@@ -5,6 +5,7 @@ import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/promo_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
+import 'package:java_code_app/widget/item_category_shimmer.dart';
 import 'package:java_code_app/widget/item_list_all_menu.dart';
 import 'package:java_code_app/widget/item_menu_shimmer.dart';
 import 'package:java_code_app/widget/item_promo.dart';
@@ -63,26 +64,75 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       margin: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 16,
                       ),
-                      child: Row(
-                        children: [
-                          Image.asset('assets/images/ticket_primary.png'),
-                          Container(
-                            margin: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Promo yang tersedia',
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
+                      child: Consumer<PromoProvider>(
+                        builder: (contex, state, _) {
+                          if (state.resourceState == ResourceState.loading) {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey,
+                              highlightColor: Colors.grey.withAlpha(70),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 246, 246, 246),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(30),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      spreadRadius: 2,
+                                      color: Colors.grey.withAlpha(70),
+                                      offset: const Offset(0, 2),
+                                    )
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                        'assets/images/ticket_primary.png'),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        'Promo yang tersedia',
+                                        style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                        ],
+                            );
+                          } else if (state.resourceState ==
+                              ResourceState.hasData) {
+                            return Row(
+                              children: [
+                                Image.asset('assets/images/ticket_primary.png'),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Promo yang tersedia',
+                                    style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          } else {
+                            return const Text('something wrong');
+                          }
+                        },
                       ),
                     ),
                     _buildPromoList(context),
@@ -133,6 +183,14 @@ class _HomePageState extends State<HomePage> {
                 MenuCategoryItem('Minuman', 'assets/images/coffe_primary.png'));
           }
 
+          if (drinkMenuList.isEmpty) {
+            foodMenuList.removeAt(0);
+          }
+
+          if (foodMenuList.isEmpty) {
+            drinkMenuList.removeAt(0);
+          }
+
           allMenuList.addAll(foodMenuList);
           allMenuList.addAll(drinkMenuList);
 
@@ -170,31 +228,51 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 40,
       margin: const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 8),
-      child: ListView.builder(
-        clipBehavior: Clip.none,
-        shrinkWrap: true,
-        itemCount: categoryList.length,
-        itemBuilder: (context, index) {
-          final item = categoryList[index];
-          return InkWell(
-            onTap: () {
-              setState(() {
-                selectedIndex = index;
-              });
+      child: Consumer<PromoProvider>(
+        builder: (context, state, _) {
+          if (state.resourceState == ResourceState.loading) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
+              child: Row(
+                children: [
+                  buildCategoryItemShimmer(),
+                  buildCategoryItemShimmer(),
+                  buildCategoryItemShimmer(),
+                ],
+              ),
+            );
+          } else if (state.resourceState == ResourceState.hasData) {
+            return ListView.builder(
+              clipBehavior: Clip.none,
+              shrinkWrap: true,
+              itemCount: categoryList.length,
+              itemBuilder: (context, index) {
+                final item = categoryList[index];
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = index;
+                    });
 
-              var type = item.slug;
-              Provider.of<MenuProvider>(context, listen: false).fetchMenu(
-                type: type,
-              );
-            },
-            child: _buildCategoryItem(
-              item.name,
-              selectedIndex == index ? true : false,
-              item.assetImage,
-            ),
-          );
+                    var type = item.slug;
+                    Provider.of<MenuProvider>(context, listen: false).fetchMenu(
+                      type: type,
+                    );
+                  },
+                  child: _buildCategoryItem(
+                    item.name,
+                    selectedIndex == index ? true : false,
+                    item.assetImage,
+                  ),
+                );
+              },
+              scrollDirection: Axis.horizontal,
+            );
+          } else {
+            return const Text('something wrong');
+          }
         },
-        scrollDirection: Axis.horizontal,
       ),
     );
   }

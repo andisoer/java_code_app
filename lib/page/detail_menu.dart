@@ -129,22 +129,26 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                               ),
                               Row(
                                 children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Provider.of<MenuProvider>(
-                                        context,
-                                        listen: false,
-                                      ).removeMenuCount(menu.menu.idMenu);
-                                    },
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: Size.zero,
-                                      side: BorderSide(
-                                        width: 2,
-                                        color: primaryColor,
+                                  Visibility(
+                                    visible:
+                                        menu.menu.jumlah > 0 ? true : false,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Provider.of<MenuProvider>(
+                                          context,
+                                          listen: false,
+                                        ).removeMenuCount(menu.menu.idMenu);
+                                      },
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size.zero,
+                                        side: BorderSide(
+                                          width: 2,
+                                          color: primaryColor,
+                                        ),
                                       ),
+                                      child: const Icon(Icons.remove),
                                     ),
-                                    child: const Icon(Icons.remove),
                                   ),
                                   Consumer<MenuProvider>(
                                     builder: (context, state, _) {
