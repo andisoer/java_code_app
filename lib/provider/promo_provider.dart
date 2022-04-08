@@ -9,7 +9,7 @@ class PromoProvider extends ChangeNotifier {
   final ApiService apiService;
 
   PromoProvider({required this.apiService}) {
-    _fetchPromo();
+    fetchPromo();
   }
 
   late PromoResult _promoResult;
@@ -18,7 +18,7 @@ class PromoProvider extends ChangeNotifier {
   late ResourceState _state;
   ResourceState get resourceState => _state;
 
-  Future<dynamic> _fetchPromo() async {
+  Future<dynamic> fetchPromo() async {
     try {
       _state = ResourceState.loading;
       notifyListeners();

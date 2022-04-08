@@ -62,83 +62,92 @@ class _HomePageState extends State<HomePage> {
               decoration: appBarDecoration(context),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
-                      child: Consumer<PromoProvider>(
-                        builder: (contex, state, _) {
-                          if (state.resourceState == ResourceState.loading) {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey,
-                              highlightColor: Colors.grey.withAlpha(70),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color.fromARGB(255, 246, 246, 246),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 3,
-                                      spreadRadius: 2,
-                                      color: Colors.grey.withAlpha(70),
-                                      offset: const Offset(0, 2),
-                                    )
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(
-                                        'assets/images/ticket_primary.png'),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        'Promo yang tersedia',
-                                        style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          } else if (state.resourceState ==
-                              ResourceState.hasData) {
-                            return Row(
-                              children: [
-                                Image.asset('assets/images/ticket_primary.png'),
-                                Container(
-                                  margin: const EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    'Promo yang tersedia',
-                                    style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  Provider.of<PromoProvider>(context, listen: false)
+                      .fetchPromo();
+                  Provider.of<MenuProvider>(context, listen: false)
+                      .fetchMenu(type: 'all');
+                },
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        child: Consumer<PromoProvider>(
+                          builder: (contex, state, _) {
+                            if (state.resourceState == ResourceState.loading) {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey,
+                                highlightColor: Colors.grey.withAlpha(70),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                        255, 246, 246, 246),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(30),
                                     ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 3,
+                                        spreadRadius: 2,
+                                        color: Colors.grey.withAlpha(70),
+                                        offset: const Offset(0, 2),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            );
-                          } else {
-                            return const Text('something wrong');
-                          }
-                        },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Image.asset(
+                                          'assets/images/ticket_primary.png'),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          'Promo yang tersedia',
+                                          style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else if (state.resourceState ==
+                                ResourceState.hasData) {
+                              return Row(
+                                children: [
+                                  Image.asset(
+                                      'assets/images/ticket_primary.png'),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Promo yang tersedia',
+                                      style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return const Text('something wrong');
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    _buildPromoList(context),
-                    _buildCategoryList(),
-                    _buildMenuList()
-                  ],
+                      _buildPromoList(context),
+                      _buildCategoryList(),
+                      _buildMenuList()
+                    ],
+                  ),
                 ),
               ),
             ),
