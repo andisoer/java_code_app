@@ -106,23 +106,17 @@ class _MyAppState extends State<MyApp> {
         .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.mobile ||
           result == ConnectivityResult.wifi) {
-        WidgetsBinding.instance?.addPostFrameCallback(
-          (timeStamp) {
-            Navigator.popAndPushNamed(context, BottomNavigationMain.routeName);
-          },
-        );
+        setState(() {
+          internetConnected = true;
+        });
       } else if (result == ConnectivityResult.none) {
-        WidgetsBinding.instance?.addPostFrameCallback(
-          (timeStamp) {
-            Navigator.popAndPushNamed(context, NoInternetPage.routeName);
-          },
-        );
+        setState(() {
+          internetConnected = false;
+        });
       } else {
-        WidgetsBinding.instance?.addPostFrameCallback(
-          (timeStamp) {
-            Navigator.popAndPushNamed(context, NoInternetPage.routeName);
-          },
-        );
+        setState(() {
+          internetConnected = false;
+        });
       }
     });
   }

@@ -98,20 +98,25 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
-                  onPressed: () {
-                    Provider.of<MenuProvider>(context, listen: false)
-                        .removeMenuCount(menu.idMenu);
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    side: BorderSide(
-                      width: 2,
-                      color: primaryColor,
+                Visibility(
+                  visible: menu.jumlah > 0 ? true : false,
+                  child: TextButton(
+                    onPressed: () {
+                      Provider.of<MenuProvider>(
+                        context,
+                        listen: false,
+                      ).removeMenuCount(menu.idMenu);
+                    },
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      side: BorderSide(
+                        width: 2,
+                        color: primaryColor,
+                      ),
                     ),
+                    child: const Icon(Icons.remove),
                   ),
-                  child: const Icon(Icons.remove),
                 ),
                 Text(
                   menu.jumlah.toString(),
@@ -124,6 +129,17 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                   onPressed: () {
                     Provider.of<MenuProvider>(context, listen: false)
                         .addMenuCount(menu.idMenu);
+
+                    if (menu.jumlah > 0) {
+                      WidgetsBinding.instance?.addPostFrameCallback(
+                        (timeStamp) {
+                          Navigation.intentWithData(
+                            DetailMenuPage.routeName,
+                            menu.idMenu,
+                          );
+                        },
+                      );
+                    }
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
