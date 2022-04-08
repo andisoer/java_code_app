@@ -17,8 +17,6 @@ class LocationProvider extends ChangeNotifier {
         desiredAccuracy: LocationAccuracy.best,
       );
 
-      print(currentPosition);
-
       _position = currentPosition;
       await _getAddressFromLatLng();
     } catch (e) {
@@ -30,8 +28,6 @@ class LocationProvider extends ChangeNotifier {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
           _position!.latitude, _position!.longitude);
-
-      print(placemarks);
 
       Placemark place = placemarks[0];
 

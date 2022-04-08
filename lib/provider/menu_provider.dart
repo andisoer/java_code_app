@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
+import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
-import 'package:java_code_app/main.dart';
 
 enum MenuResourceState { loading, hasData, error, noData }
 
@@ -18,12 +18,17 @@ class MenuProvider extends ChangeNotifier {
   late MenuResourceState _state;
   MenuResourceState get resourceState => _state;
 
+  List<Menu> _menuList = [];
+  List<Menu> get menuList => _menuList; 
+
   Future<dynamic> fetchMenu({required String type}) async {
     try {
       _state = MenuResourceState.loading;
       notifyListeners();
 
-      var token = preferences.getToken();
+      SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+      await _preferences.init();
+      var token = _preferences.getToken();
 
       late MenuResult data;
       if (type == 'all') {
@@ -48,4 +53,10 @@ class MenuProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+  addMenu(Menu menu) {
+
+  }
+
 }

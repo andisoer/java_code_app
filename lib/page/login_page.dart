@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/page/check_location.dart';
-import 'package:java_code_app/page/home.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:provider/provider.dart';
@@ -159,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                                 WidgetsBinding.instance?.addPostFrameCallback(
                                   (timeStamp) {
                                     Navigator.popAndPushNamed(
-                                        context, HomePage.routeName);
+                                        context, CheckLocationPage.routeName);
                                   },
                                 );
                                 return Text(

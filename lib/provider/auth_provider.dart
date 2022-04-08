@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/auth_result.dart';
-import 'package:java_code_app/main.dart';
 
 enum ResourceState { loading, success, error, none }
 
@@ -33,7 +32,9 @@ class AuthProvider extends ChangeNotifier {
       if (data.statusCode == 200) {
         _state = ResourceState.success;
 
-        preferences.setPreferences(
+        SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+        await _preferences.init();
+        _preferences.setPreferences(
           data.data.user,
           data.data.token,
         );

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:java_code_app/page/bottom_navigation_main.dart';
-import 'package:java_code_app/page/home.dart';
 import 'package:java_code_app/provider/location_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +14,6 @@ class CheckLocationPage extends StatefulWidget {
 }
 
 class _CheckLocationPageState extends State<CheckLocationPage> {
-  Position? _currentPosition;
-  String _currentAddress = '-';
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +107,6 @@ class _CheckLocationPageState extends State<CheckLocationPage> {
     );
   }
 
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
   _getLocation() {
     Provider.of<LocationProvider>(context, listen: false).getCurrentLocation();
   }

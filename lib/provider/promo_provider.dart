@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
+import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/promo_result.dart';
-import 'package:java_code_app/main.dart';
 
 enum ResourceState { loading, hasData, error, noData }
 
@@ -23,7 +23,12 @@ class PromoProvider extends ChangeNotifier {
       _state = ResourceState.loading;
       notifyListeners();
 
-      var token = preferences.getToken();
+      SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+      await _preferences.init();
+      var token = _preferences.getToken();
+
+      print(token);
+
       final data = await apiService.fetchPromo(token: token);
       if (data.data.isNotEmpty) {
         _state = ResourceState.hasData;
