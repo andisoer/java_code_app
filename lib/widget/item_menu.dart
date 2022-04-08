@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/common/navigation.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:java_code_app/page/detail_menu.dart';
+import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
+import 'package:provider/provider.dart';
 
 InkWell buildItemMenu(BuildContext context, Menu menu) {
   return InkWell(
@@ -97,7 +99,10 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Provider.of<MenuProvider>(context, listen: false)
+                        .removeMenuCount(menu.idMenu);
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     minimumSize: Size.zero,
@@ -109,14 +114,17 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                   child: const Icon(Icons.remove),
                 ),
                 Text(
-                  '1',
+                  menu.jumlah.toString(),
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Provider.of<MenuProvider>(context, listen: false)
+                        .addMenuCount(menu.idMenu);
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     minimumSize: Size.zero,

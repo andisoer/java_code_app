@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
+import 'package:collection/collection.dart';
 
 enum MenuResourceState { loading, hasData, error, noData }
 
@@ -18,8 +21,9 @@ class MenuProvider extends ChangeNotifier {
   late MenuResourceState _state;
   MenuResourceState get resourceState => _state;
 
-  List<Menu> _menuList = [];
-  List<Menu> get menuList => _menuList; 
+  //Tambah ke pesanan sementara ("cart")
+  final List<Menu> _menuAddedList = [];
+  List<Menu> get menuAddedList => _menuAddedList;
 
   Future<dynamic> fetchMenu({required String type}) async {
     try {
@@ -54,9 +58,48 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
+  addMenuCount(int menuId) {
+    Menu? menu =
+        _menuAddedList.firstWhereOrNull((item) => item.idMenu == menuId);
 
-  addMenu(Menu menu) {
+    Menu menuAdd = _findMenu(menuId);
+    int index = _findMenuIndex(menuId);
 
+    _menuResult.data[index].jumlah++;
+
+    if (menu == null) {
+      //Tambah baru
+      menuAdd.jumlah = 1;
+      _menuAddedList.add(menuAdd);
+    }
+
+    notifyListeners();
   }
 
+  removeMenuCount(int menuId) {
+    Menu? menu =
+        _menuAddedList.firstWhereOrNull((item) => item.idMenu == menuId);
+
+    // Menu menuAdd = _findMenu(menuId);
+    int index = _findMenuIndex(menuId);
+
+    if (_menuResult.data[index].jumlah > 0) {
+      _menuResult.data[index].jumlah--;
+    }
+
+    if (menu != null && menu.jumlah == 0) {
+      //hapus menu dari pesanan sementara
+      _menuAddedList.removeWhere((item) => item.idMenu == menuId);
+    }
+
+    notifyListeners();
+  }
+
+  int _findMenuIndex(int menuId) {
+    return _menuResult.data.indexWhere((item) => item.idMenu == menuId);
+  }
+
+  Menu _findMenu(int menuId) {
+    return _menuResult.data.firstWhere((item) => item.idMenu == menuId);
+  }
 }

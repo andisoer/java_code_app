@@ -33,6 +33,12 @@ class Menu {
         required this.deskripsi,
         required this.foto,
         required this.status,
+        
+        //Tambah pesanan
+        this.jumlah = 0,
+        this.catatan = '',
+        this.level,
+        this.topping
     });
 
     int idMenu;
@@ -42,6 +48,12 @@ class Menu {
     String deskripsi;
     String foto;
     int status;
+
+    //Tambah pesanan
+    int jumlah;
+    String catatan;
+    int? level;
+    List<int>? topping;
 
     factory Menu.fromJson(Map<String, dynamic> json) => Menu(
         idMenu: json["id_menu"],

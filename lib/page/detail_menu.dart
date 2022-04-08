@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/data/model/menu_detail_result.dart';
+import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
+import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:provider/provider.dart';
@@ -128,7 +130,12 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                               Row(
                                 children: [
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Provider.of<MenuProvider>(
+                                        context,
+                                        listen: false,
+                                      ).removeMenuCount(menu.menu.idMenu);
+                                    },
                                     style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
                                       minimumSize: Size.zero,
@@ -139,15 +146,27 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                                     ),
                                     child: const Icon(Icons.remove),
                                   ),
-                                  Text(
-                                    '1',
-                                    style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                    ),
+                                  Consumer<MenuProvider>(
+                                    builder: (context, state, _) {
+                                      Menu _menu = state.menuResult.data
+                                          .firstWhere((item) =>
+                                              item.idMenu == menu.menu.idMenu);
+                                      return Text(
+                                        _menu.jumlah.toString(),
+                                        style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                      );
+                                    },
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Provider.of<MenuProvider>(
+                                        context,
+                                        listen: false,
+                                      ).addMenuCount(menu.menu.idMenu);
+                                    },
                                     style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
                                       minimumSize: Size.zero,
@@ -611,15 +630,13 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 2,
-                          spreadRadius: 2,
-                          color: Colors.grey.withAlpha(100)
-                        )
-                      ]
-                    ),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 2,
+                              spreadRadius: 2,
+                              color: Colors.grey.withAlpha(100))
+                        ]),
                     child: CircleAvatar(
                       backgroundColor: primaryColor,
                       child: IconButton(
