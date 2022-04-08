@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NoInternetPage extends StatefulWidget {
+  static const routeName = 'no_internet';
   const NoInternetPage({Key? key}) : super(key: key);
 
   @override

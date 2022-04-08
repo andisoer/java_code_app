@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
@@ -24,6 +22,13 @@ class MenuProvider extends ChangeNotifier {
   //Tambah ke pesanan sementara ("cart")
   final List<Menu> _menuAddedList = [];
   List<Menu> get menuAddedList => _menuAddedList;
+
+  int menuTotal = 0;
+  int priceTotal = 0;
+
+  int dicountAmount = 0;
+  int voucherAmount = 0;
+  int totalPayment = 0;
 
   Future<dynamic> fetchMenu({required String type}) async {
     try {
@@ -66,6 +71,9 @@ class MenuProvider extends ChangeNotifier {
     int index = _findMenuIndex(menuId);
 
     _menuResult.data[index].jumlah++;
+    menuTotal += 1;
+    priceTotal += _menuResult.data[index].harga;
+    totalPayment = priceTotal;
 
     if (menu == null) {
       //Tambah baru
@@ -85,6 +93,9 @@ class MenuProvider extends ChangeNotifier {
 
     if (_menuResult.data[index].jumlah > 0) {
       _menuResult.data[index].jumlah--;
+      menuTotal -= 1;
+      priceTotal -= _menuResult.data[index].harga;
+      totalPayment = priceTotal;
     }
 
     if (menu != null && menu.jumlah == 0) {

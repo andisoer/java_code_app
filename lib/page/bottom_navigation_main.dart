@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/page/checkout.dart';
 import 'package:java_code_app/page/home.dart';
 import 'package:java_code_app/page/order.dart';
 import 'package:java_code_app/page/profile.dart';
+import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavigationMain extends StatefulWidget {
   static const routeName = 'bottomNavigationMain';
@@ -25,13 +28,22 @@ class _BottomNavigationMainState extends State<BottomNavigationMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(
-          Icons.shopping_cart,
-          color: Colors.white,
-        ),
-        backgroundColor: primaryColor,
+      floatingActionButton: Consumer<MenuProvider>(
+        builder: (context, state, _) {
+          return Visibility(
+            visible: state.menuAddedList.isNotEmpty ? true : false,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, CheckoutPage.routeName);
+              },
+              child: const Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+              backgroundColor: primaryColor,
+            ),
+          );
+        },
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(

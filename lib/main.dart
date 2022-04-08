@@ -7,10 +7,12 @@ import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/check_location.dart';
+import 'package:java_code_app/page/checkout.dart';
 import 'package:java_code_app/page/detail_menu.dart';
 import 'package:java_code_app/page/detail_promo.dart';
 import 'package:java_code_app/page/home.dart';
 import 'package:java_code_app/page/login_page.dart';
+import 'package:java_code_app/page/no_internet.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/provider/location_provider.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
@@ -73,6 +75,8 @@ class _MyAppState extends State<MyApp> {
           LoginPage.routeName: (context) => const LoginPage(),
           CheckLocationPage.routeName: (context) => const CheckLocationPage(),
           HomePage.routeName: (context) => const HomePage(),
+          CheckoutPage.routeName: (context) => const CheckoutPage(),
+          NoInternetPage.routeName: (context) => const NoInternetPage(),
           DetailMenuPage.routeName: (context) => ChangeNotifierProvider(
                 create: (_) => MenuDetailProvider(
                   apiService: ApiService(),
@@ -100,22 +104,25 @@ class _MyAppState extends State<MyApp> {
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile) {
-        setState(() {
-          internetConnected = true;
-        });
-      } else if (result == ConnectivityResult.wifi) {
-        setState(() {
-          internetConnected = true;
-        });
+      if (result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi) {
+        WidgetsBinding.instance?.addPostFrameCallback(
+          (timeStamp) {
+            Navigator.popAndPushNamed(context, BottomNavigationMain.routeName);
+          },
+        );
       } else if (result == ConnectivityResult.none) {
-        setState(() {
-          internetConnected = false;
-        });
+        WidgetsBinding.instance?.addPostFrameCallback(
+          (timeStamp) {
+            Navigator.popAndPushNamed(context, NoInternetPage.routeName);
+          },
+        );
       } else {
-        setState(() {
-          internetConnected = false;
-        });
+        WidgetsBinding.instance?.addPostFrameCallback(
+          (timeStamp) {
+            Navigator.popAndPushNamed(context, NoInternetPage.routeName);
+          },
+        );
       }
     });
   }

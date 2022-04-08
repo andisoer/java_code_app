@@ -11,8 +11,6 @@ class LocationProvider extends ChangeNotifier {
 
   Future<void> getCurrentLocation() async {
     try {
-      Geolocator geolocator = Geolocator();
-
       Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
       );
@@ -31,7 +29,8 @@ class LocationProvider extends ChangeNotifier {
 
       Placemark place = placemarks[0];
 
-      _address = "${place.street}, ${place.locality}, ${place.postalCode}, ${place.country}";
+      _address =
+          "${place.street}, ${place.locality}, ${place.postalCode}, ${place.country}";
       notifyListeners();
     } catch (e) {
       print(e);
