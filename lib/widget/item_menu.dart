@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/common/navigation.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:java_code_app/page/detail_menu.dart';
+import 'package:java_code_app/page/no_internet.dart';
+import 'package:java_code_app/provider/internet_connection_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +12,13 @@ import 'package:provider/provider.dart';
 InkWell buildItemMenu(BuildContext context, Menu menu) {
   return InkWell(
     onTap: () {
-      Navigation.intentWithData(DetailMenuPage.routeName, menu.idMenu);
+      isInternetConnected().then((internetConnected) {
+        if (internetConnected) {
+          Navigation.intentWithData(DetailMenuPage.routeName, menu.idMenu);
+        } else {
+          Navigator.pushNamed(context, NoInternetPage.routeName);
+        }
+      });
     },
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),

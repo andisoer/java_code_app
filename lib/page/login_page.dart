@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:java_code_app/page/check_location.dart';
+import 'package:java_code_app/page/no_internet.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
+import 'package:java_code_app/provider/internet_connection_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -234,7 +236,16 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          loginWithGoogle();
+                          isInternetConnected().then((internetConnected) {
+                            if (internetConnected) {
+                              loginWithGoogle();
+                            } else {
+                              Navigator.pushNamed(
+                                context,
+                                NoInternetPage.routeName,
+                              );
+                            }
+                          });
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -351,12 +362,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() {
-    Provider.of<AuthProvider>(context, listen: false).login(
-      nama: "",
-      password: password,
-      email: email,
-      isGoogle: false,
-    );
+    isInternetConnected().then((internetConnected) {
+      if (internetConnected) {
+        Provider.of<AuthProvider>(context, listen: false).login(
+          nama: "",
+          password: password,
+          email: email,
+          isGoogle: false,
+        );
+      } else {
+        Navigator.pushNamed(context, NoInternetPage.routeName);
+      }
+    });
   }
 
   @override

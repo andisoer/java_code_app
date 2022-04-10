@@ -3,12 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/common/navigation.dart';
 import 'package:java_code_app/data/model/promo_result.dart';
 import 'package:java_code_app/page/detail_promo.dart';
+import 'package:java_code_app/page/no_internet.dart';
+import 'package:java_code_app/provider/internet_connection_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 
 InkWell itemPromo(BuildContext context, Promo promo) {
   return InkWell(
     onTap: () {
-      Navigation.intentWithData(DetailPromoPage.routeName, promo.idPromo!);
+      isInternetConnected().then((internetConnected) {
+        if (internetConnected) {
+          Navigation.intentWithData(DetailPromoPage.routeName, promo.idPromo!);
+        } else {
+          Navigator.pushNamed(context, NoInternetPage.routeName);
+        }
+      });
     },
     child: Container(
       margin: const EdgeInsets.only(right: 16),
