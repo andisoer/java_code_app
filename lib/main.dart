@@ -10,15 +10,19 @@ import 'package:java_code_app/page/check_location.dart';
 import 'package:java_code_app/page/checkout.dart';
 import 'package:java_code_app/page/detail_menu.dart';
 import 'package:java_code_app/page/detail_promo.dart';
+import 'package:java_code_app/page/detail_voucher.dart';
 import 'package:java_code_app/page/home.dart';
 import 'package:java_code_app/page/login_page.dart';
 import 'package:java_code_app/page/no_internet.dart';
+import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/provider/location_provider.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/promo_detail_provider.dart';
 import 'package:java_code_app/provider/promo_provider.dart';
+import 'package:java_code_app/provider/voucher_detail_provider.dart';
+import 'package:java_code_app/provider/voucher_provider.dart';
 import 'package:provider/provider.dart';
 
 SharedPreferencesUtils preferences = SharedPreferencesUtils();
@@ -59,6 +63,11 @@ class _MyAppState extends State<MyApp> {
             apiService: ApiService(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => VoucherProvider(
+            apiService: ApiService(),
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => LocationProvider())
       ],
       child: MaterialApp(
@@ -77,6 +86,7 @@ class _MyAppState extends State<MyApp> {
           HomePage.routeName: (context) => const HomePage(),
           CheckoutPage.routeName: (context) => const CheckoutPage(),
           NoInternetPage.routeName: (context) => const NoInternetPage(),
+          VoucherPage.routeName: (context) => const VoucherPage(),
           DetailMenuPage.routeName: (context) => ChangeNotifierProvider(
                 create: (_) => MenuDetailProvider(
                   apiService: ApiService(),
@@ -90,6 +100,13 @@ class _MyAppState extends State<MyApp> {
                   promoId: ModalRoute.of(context)?.settings.arguments as int,
                 ),
                 child: const DetailPromoPage(),
+              ),
+          DetailVoucherPage.routeName: (context) => ChangeNotifierProvider(
+                create: (_) => VoucherDetailProvider(
+                  apiService: ApiService(),
+                  voucherId: ModalRoute.of(context)?.settings.arguments as int,
+                ),
+                child: const DetailVoucherPage(),
               ),
         },
         navigatorKey: navigatorKey,

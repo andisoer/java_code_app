@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
@@ -239,44 +240,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Container _buildVoucherAmountInformation() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/voucher_outline_primary.png'),
-          Container(
-            margin: const EdgeInsets.only(left: 8),
-            child: Text(
-              'Voucher',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600, fontSize: 16),
+  InkWell _buildVoucherAmountInformation() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, VoucherPage.routeName);
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/voucher_outline_primary.png'),
+            Container(
+              margin: const EdgeInsets.only(left: 8),
+              child: Text(
+                'Voucher',
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600, fontSize: 16),
+              ),
             ),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Pilih Voucher',
-                  style: GoogleFonts.montserrat(
-                    color: const Color.fromARGB(255, 46, 46, 46),
-                    fontWeight: FontWeight.w400,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Pilih Voucher',
+                    style: GoogleFonts.montserrat(
+                      color: const Color.fromARGB(255, 46, 46, 46),
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 4),
-                  child: const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.grey,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                  Container(
+                    margin: const EdgeInsets.only(left: 4),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -378,8 +384,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
           List<MenuListItem> allMenuList = [];
           List<MenuListItem> foodMenuList = [];
           List<MenuListItem> drinkMenuList = [];
-
-          print(jsonEncode(state.menuAddedList));
 
           for (int i = 0; i < state.menuAddedList.length; i++) {
             var item = state.menuAddedList[i];

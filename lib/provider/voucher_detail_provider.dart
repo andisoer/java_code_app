@@ -1,24 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
-import 'package:java_code_app/data/model/promo_result.dart';
+import 'package:java_code_app/data/model/voucher_detail_result.dart';
 
 enum ResourceState { loading, hasData, error, noData }
 
-class PromoProvider extends ChangeNotifier {
+class VoucherDetailProvider extends ChangeNotifier {
   final ApiService apiService;
 
-  PromoProvider({required this.apiService}) {
-    fetchPromo();
+  VoucherDetailProvider({required this.apiService, required int voucherId}) {
+    _fetchVoucherDetail(id: voucherId);
   }
 
-  late PromoResult _promoResult;
-  PromoResult get promoResult => _promoResult;
+  late VoucherDetailResult _voucherDetailResult;
+  VoucherDetailResult get voucherResult => _voucherDetailResult;
 
   late ResourceState _state;
   ResourceState get resourceState => _state;
 
-  Future<dynamic> fetchPromo() async {
+  Future<dynamic> _fetchVoucherDetail({required int id}) async {
     try {
       _state = ResourceState.loading;
       notifyListeners();
@@ -27,11 +27,11 @@ class PromoProvider extends ChangeNotifier {
       await _preferences.init();
       var token = _preferences.getToken();
 
-      final data = await apiService.fetchPromo(token: token);
-      if (data.data.isNotEmpty) {
+      final data = await apiService.fetchVoucherDetail(id: id, token: token);
+      if (data.statusCode == 200) {
         _state = ResourceState.hasData;
         notifyListeners();
-        return _promoResult = data;
+        return _voucherDetailResult = data;
       } else {
         _state = ResourceState.noData;
         notifyListeners();

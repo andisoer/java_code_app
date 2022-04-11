@@ -138,7 +138,7 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                     Provider.of<MenuProvider>(context, listen: false)
                         .addMenuCount(menu.idMenu);
 
-                    if (menu.jumlah > 0) {
+                    if (menu.jumlah == 1) {
                       WidgetsBinding.instance?.addPostFrameCallback(
                         (timeStamp) {
                           Navigation.intentWithData(

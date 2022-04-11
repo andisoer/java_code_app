@@ -6,6 +6,8 @@ import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:java_code_app/data/model/promo_detail_result.dart';
 import 'package:java_code_app/data/model/promo_result.dart';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/data/model/voucher_detail_result.dart';
+import 'package:java_code_app/data/model/voucher_result.dart';
 
 class ApiService {
   static const _baseUrl = "https://javacode.landa.id/api/";
@@ -121,6 +123,41 @@ class ApiService {
       return MenuDetailResult.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to fetch promo');
+    }
+  }
+
+  Future<VoucherResult> fetchVouchersByUserId({
+    required String token,
+    required int userId,
+  }) async {
+    final response = await http.get(
+      Uri.parse(_baseUrl + 'voucher/user/' + userId.toString()),
+      headers: {
+        "token": token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return VoucherResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch voucher');
+    }
+  }
+
+  Future<VoucherDetailResult> fetchVoucherDetail(
+      {required int id, required String token}) async {
+    final response = await http.get(
+      Uri.parse(_baseUrl + 'voucher/detail/' + id.toString()),
+      headers: {
+        "token": token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return VoucherDetailResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch voucher detail');
     }
   }
 }

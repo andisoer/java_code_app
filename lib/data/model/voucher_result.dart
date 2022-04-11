@@ -16,7 +16,13 @@ class VoucherResult {
 
   factory VoucherResult.fromJson(Map<String, dynamic> json) => VoucherResult(
         statusCode: json["status_code"],
-        data: List<Voucher>.from(json["data"].map((x) => Voucher.fromJson(x))),
+        data: json["data"] != null
+            ? List<Voucher>.from(
+                json["data"].map(
+                  (x) => Voucher.fromJson(x),
+                ),
+              )
+            : List<Voucher>.empty(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,19 +44,21 @@ class Voucher {
     required this.type,
     required this.status,
     required this.catatan,
+    this.isSelected = false
   });
 
-  int idVoucher;
-  String nama;
-  int idUser;
-  String namaUser;
-  int nominal;
-  String infoVoucher;
-  int periodeMulai;
-  int periodeSelesai;
-  int type;
-  int status;
-  String catatan;
+  int? idVoucher;
+  String? nama;
+  int? idUser;
+  String? namaUser;
+  int? nominal;
+  String? infoVoucher;
+  int? periodeMulai;
+  int? periodeSelesai;
+  int? type;
+  int? status;
+  String? catatan;
+  bool isSelected;
 
   factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
         idVoucher: json["id_voucher"],
@@ -63,7 +71,7 @@ class Voucher {
         periodeSelesai: json["periode_selesai"],
         type: json["type"],
         status: json["status"],
-        catatan: json["catatan"],
+        catatan: json["catatan"] == null ? '' : json['catatan'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -77,6 +85,6 @@ class Voucher {
         "periode_selesai": periodeSelesai,
         "type": type,
         "status": status,
-        "catatan": catatan,
+        "catatan": catatan == null ? '' : catatan,
       };
 }
