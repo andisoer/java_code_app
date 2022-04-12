@@ -7,6 +7,7 @@ import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class DetailMenuPage extends StatefulWidget {
   static const routeName = 'detailMenu';
@@ -17,6 +18,10 @@ class DetailMenuPage extends StatefulWidget {
 }
 
 class _DetailMenuPageState extends State<DetailMenuPage> {
+  var note = "";
+  late Level level;
+  late Topping topping;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -211,7 +216,8 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        _builtLevelInformation(context, menu.level),
+                        _builtLevelInformation(
+                            context, menu.level, menu.menu.idMenu),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           child: const Divider(
@@ -227,7 +233,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        _builtNoteInformation(context),
+                        _builtNoteInformation(context, menu.menu),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           child: const Divider(
@@ -333,14 +339,15 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  InkWell _builtLevelInformation(BuildContext context, List<Level> level) {
+  InkWell _builtLevelInformation(
+      BuildContext context, List<Level> level, int menuId) {
     return InkWell(
       onTap: () {
         showBottomSheet(
           elevation: 24,
           context: context,
           builder: (context) {
-            return _showBottomSheetLevel(level);
+            return _showBottomSheetLevel(level, menuId);
           },
         );
       },
@@ -363,13 +370,17 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           ),
           Row(
             children: [
-              Text(
-                '1',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                ),
-              ),
+              Consumer<MenuProvider>(builder: (context, state, _) {
+                var _menu = state.menuResult.data
+                    .firstWhere((item) => item.idMenu == menuId);
+                return Text(
+                  _menu.level == null ? 'Pilih level' : _menu.level.toString(),
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                );
+              }),
               Container(
                 margin: const EdgeInsets.only(left: 4),
                 child: const Icon(
@@ -438,14 +449,14 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  InkWell _builtNoteInformation(BuildContext context) {
+  InkWell _builtNoteInformation(BuildContext context, Menu menu) {
     return InkWell(
       onTap: () {
         showBottomSheet(
           elevation: 24,
           context: context,
           builder: (context) {
-            return _showBottomSheetNote();
+            return _showBottomSheetNote(menu);
           },
         );
       },
@@ -468,12 +479,18 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           ),
           Row(
             children: [
-              Text(
-                'Lorem Ipsum',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                ),
+              Consumer<MenuProvider>(
+                builder: (context, state, _) {
+                  var _menu = state.menuResult.data
+                      .firstWhere((item) => item.idMenu == menu.idMenu);
+                  return Text(
+                    _menu.catatan.isEmpty ? '-' : _menu.catatan,
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  );
+                },
               ),
               Container(
                 margin: const EdgeInsets.only(left: 4),
@@ -490,7 +507,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  Wrap _showBottomSheetLevel(List<Level> level) {
+  Wrap _showBottomSheetLevel(List<Level> level, int menuId) {
     return Wrap(
       children: [
         Container(
@@ -525,9 +542,25 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                         direction: Axis.horizontal,
                         children: [
                           for (var item in level)
-                            _buildItemChip(
-                              text: item.keterangan,
-                              selected: false,
+                            InkWell(
+                              onTap: () {
+                                Provider.of<MenuProvider>(context,
+                                        listen: false)
+                                    .chooseLevel(menuId, item);
+                              },
+                              child: Consumer<MenuProvider>(
+                                builder: (create, state, _) {
+                                  var _menu = state.menuResult.data.firstWhere(
+                                      (item) => item.idMenu == menuId);
+                                  return _buildItemChip(
+                                    text: item.keterangan,
+                                    selected: _menu.level.toString() ==
+                                            item.keterangan
+                                        ? true
+                                        : false,
+                                  );
+                                },
+                              ),
                             )
                         ],
                       )
@@ -648,7 +681,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  Wrap _showBottomSheetNote() {
+  Wrap _showBottomSheetNote(Menu menu) {
     return Wrap(
       children: [
         Container(
@@ -678,25 +711,44 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               ),
               Row(
                 children: [
-                  const Expanded(
-                    child: TextField(
-                      maxLength: 100,
+                  Expanded(
+                    child: Consumer<MenuProvider>(
+                      builder: (context, state, _) {
+                        var _menu = state.menuResult.data.firstWhereOrNull(
+                            (item) => item.idMenu == menu.idMenu);
+                        return TextField(
+                          controller: TextEditingController()
+                            ..text = _menu == null ? '' : _menu.catatan,
+                          onChanged: (value) => note = value,
+                          maxLength: 100,
+                        );
+                      },
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 2,
-                              color: Colors.grey.withAlpha(100))
-                        ]),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 2,
+                          color: Colors.grey.withAlpha(100),
+                        )
+                      ],
+                    ),
                     child: CircleAvatar(
                       backgroundColor: primaryColor,
                       child: IconButton(
                         color: Colors.white,
-                        onPressed: () {},
+                        onPressed: () {
+                          Provider.of<MenuProvider>(
+                            context,
+                            listen: false,
+                          ).saveNote(
+                            menu.idMenu,
+                            note,
+                          );
+                        },
                         icon: const Icon(Icons.check),
                       ),
                     ),

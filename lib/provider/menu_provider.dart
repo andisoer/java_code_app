@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
+import 'package:java_code_app/data/model/menu_detail_result.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:collection/collection.dart';
 import 'package:java_code_app/data/model/voucher_result.dart';
@@ -156,4 +157,20 @@ class MenuProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void saveNote(int menuId, String note) {
+    int index = _findMenuIndex(menuId);
+
+    _menuResult.data[index].catatan = note;
+
+    notifyListeners();
+  }
+
+  void chooseLevel(int menuId, Level level) {
+    int index = _findMenuIndex(menuId);
+    _menuResult.data[index].level = int.parse(level.keterangan);
+
+    notifyListeners();
+  }
+
 }
