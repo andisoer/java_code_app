@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
-import 'package:java_code_app/data/model/promo_result.dart';
 import 'package:java_code_app/data/model/voucher_result.dart';
 
 enum ResourceState { loading, hasData, error, noData }
@@ -39,12 +38,10 @@ class VoucherProvider extends ChangeNotifier {
         notifyListeners();
         return _voucherResult = data;
       } else {
-        print(data);
         _state = ResourceState.noData;
         notifyListeners();
       }
     } catch (e) {
-      print(e);
       _state = ResourceState.error;
       notifyListeners();
     }

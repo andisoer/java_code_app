@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:java_code_app/data/model/auth_result.dart';
+import 'package:java_code_app/data/model/discount_result.dart';
 import 'package:java_code_app/data/model/menu_detail_result.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:java_code_app/data/model/promo_detail_result.dart';
@@ -138,7 +139,6 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return VoucherResult.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to fetch voucher');
@@ -158,6 +158,24 @@ class ApiService {
       return VoucherDetailResult.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to fetch voucher detail');
+    }
+  }
+
+   Future<DiscountResult> fetchDiscountByUserId({
+    required String token,
+    required int userId,
+  }) async {
+    final response = await http.get(
+      Uri.parse(_baseUrl + 'diskon/user/' + userId.toString()),
+      headers: {
+        "token": token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return DiscountResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch voucher');
     }
   }
 }
