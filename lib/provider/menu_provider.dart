@@ -173,4 +173,12 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void chooseTopping(int menuId, List<int> toppings) {
+    int index = _findMenuIndex(menuId);
+
+    _menuResult.data[index].topping?.addAll(toppings);
+
+    notifyListeners();
+  }
+
 }

@@ -225,7 +225,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        _builtToppingInformation(context, menu.topping),
+                        _builtToppingInformation(context, menu.topping, menu.menu.idMenu),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           child: const Divider(
@@ -397,14 +397,14 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
   }
 
   InkWell _builtToppingInformation(
-      BuildContext context, List<dynamic> topping) {
+      BuildContext context, List<Topping> topping, int menuId) {
     return InkWell(
       onTap: () {
         showBottomSheet(
           elevation: 24,
           context: context,
           builder: (context) {
-            return _showBottomSheetTopping(topping);
+            return _showBottomSheetTopping(topping, menuId);
           },
         );
       },
@@ -417,7 +417,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
             child: Container(
               margin: const EdgeInsets.only(left: 8),
               child: Text(
-                'Toping',
+                'Topping',
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -427,12 +427,26 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           ),
           Row(
             children: [
-              Text(
-                'Mozarella',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                ),
+              Consumer<MenuProvider>(
+                builder: (context, state, _) {
+                  var text = 'Pilih topping';
+                  var _menu = state.menuResult.data.firstWhere((item) => item.idMenu == menuId);
+                  if (_menu.topping != null) {
+                    for (var i = 0; i < _menu.topping!.length; i++) {
+                      if (_menu.topping![i].toString() == topping[i].keterangan.toString()) {
+                        text += topping[i].keterangan+', ';
+                      }
+                    }
+                  }
+
+                  return Text(
+                    text,
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  );
+                },
               ),
               Container(
                 margin: const EdgeInsets.only(left: 4),
@@ -620,7 +634,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  Wrap _showBottomSheetTopping(List<dynamic> topping) {
+  Wrap _showBottomSheetTopping(List<dynamic> topping, int menuId) {
     return Wrap(
       children: [
         Container(
@@ -655,9 +669,14 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                         direction: Axis.horizontal,
                         children: [
                           for (var item in topping)
-                            _buildItemChip(
-                              text: item.keterangan,
-                              selected: false,
+                            InkWell(
+                              onTap: () {
+                                Provider.of<MenuProvider>(context, listen: false).chooseTopping(menuId, item);
+                              },
+                              child: _buildItemChip(
+                                text: item.keterangan,
+                                selected: false,
+                              ),
                             )
                         ],
                       )
