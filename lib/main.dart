@@ -16,6 +16,7 @@ import 'package:java_code_app/page/login_page.dart';
 import 'package:java_code_app/page/no_internet.dart';
 import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
+import 'package:java_code_app/provider/discount_provider.dart';
 import 'package:java_code_app/provider/location_provider.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
@@ -65,6 +66,11 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (_) => VoucherProvider(
+            apiService: ApiService(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DiscountProvider(
             apiService: ApiService(),
           ),
         ),

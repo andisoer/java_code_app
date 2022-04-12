@@ -18,6 +18,9 @@ class DiscountProvider extends ChangeNotifier {
   late DiscountResourceState _state;
   DiscountResourceState get resourceState => _state;
 
+  int _totalDiscount = 0;
+  int get totalDiscount => _totalDiscount;
+
   Future<dynamic> _fetchDiscountsByUserId() async {
     try {
       _state = DiscountResourceState.loading;
@@ -35,6 +38,11 @@ class DiscountProvider extends ChangeNotifier {
 
       if (data.data.isNotEmpty) {
         _state = DiscountResourceState.hasData;
+
+        for (var discount in data.data) {
+          _totalDiscount += discount.diskon;
+        }
+
         notifyListeners();
         return _discountResult = data;
       } else {

@@ -211,7 +211,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        _builtLevelInformation(context),
+                        _builtLevelInformation(context, menu.level),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           child: const Divider(
@@ -219,7 +219,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        _builtToppingInformation(context),
+                        _builtToppingInformation(context, menu.topping),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           child: const Divider(
@@ -333,14 +333,14 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  InkWell _builtLevelInformation(BuildContext context) {
+  InkWell _builtLevelInformation(BuildContext context, List<Level> level) {
     return InkWell(
       onTap: () {
         showBottomSheet(
           elevation: 24,
           context: context,
           builder: (context) {
-            return _showBottomSheetLevel();
+            return _showBottomSheetLevel(level);
           },
         );
       },
@@ -385,14 +385,15 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  InkWell _builtToppingInformation(BuildContext context) {
+  InkWell _builtToppingInformation(
+      BuildContext context, List<dynamic> topping) {
     return InkWell(
       onTap: () {
         showBottomSheet(
           elevation: 24,
           context: context,
           builder: (context) {
-            return _showBottomSheetTopping();
+            return _showBottomSheetTopping(topping);
           },
         );
       },
@@ -489,7 +490,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  Wrap _showBottomSheetLevel() {
+  Wrap _showBottomSheetLevel(List<Level> level) {
     return Wrap(
       children: [
         Container(
@@ -519,13 +520,29 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8),
-                child: Row(
-                  children: [
-                    _buildItemChip(text: '1', selected: true),
-                    _buildItemChip(text: '2', selected: false),
-                    _buildItemChip(text: '3', selected: false),
-                  ],
-                ),
+                child: level.isNotEmpty
+                    ? Wrap(
+                        direction: Axis.horizontal,
+                        children: [
+                          for (var item in level)
+                            _buildItemChip(
+                              text: item.keterangan,
+                              selected: false,
+                            )
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: Text(
+                            'Tidak ada level untuk menu ini',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
               )
             ],
           ),
@@ -570,7 +587,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  Wrap _showBottomSheetTopping() {
+  Wrap _showBottomSheetTopping(List<dynamic> topping) {
     return Wrap(
       children: [
         Container(
@@ -600,14 +617,29 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8),
-                child: Wrap(
-                  children: [
-                    _buildItemChip(text: 'Toping1', selected: true),
-                    _buildItemChip(text: 'Toping2', selected: false),
-                    _buildItemChip(text: 'Toping3', selected: false),
-                    _buildItemChip(text: 'Toping4', selected: false),
-                  ],
-                ),
+                child: topping.isNotEmpty
+                    ? Wrap(
+                        direction: Axis.horizontal,
+                        children: [
+                          for (var item in topping)
+                            _buildItemChip(
+                              text: item.keterangan,
+                              selected: false,
+                            )
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: Text(
+                            'Tidak ada topping untuk menu ini',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
               )
             ],
           ),

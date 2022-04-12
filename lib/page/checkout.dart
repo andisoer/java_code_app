@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
+import 'package:java_code_app/provider/discount_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
@@ -24,95 +24,103 @@ class _CheckoutPageState extends State<CheckoutPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 66,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: appBarDecoration(context),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/sajen_primary.png'),
-                        Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          child: Text(
-                            'Pesanan',
-                            style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _builtAppBar(context),
             _buildMenuList(),
-            Container(
-              padding: const EdgeInsets.only(top: 24),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 246, 246, 246),
-              ),
-              child: Column(
-                children: [
-                  _buildTotalOrderInformation(),
-                  Consumer<MenuProvider>(
-                    builder: (context, state, _) {
-                      if (!state.isVoucherUsed) {
-                        return Column(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(vertical: 12),
-                              child: const Divider(
-                                height: 2,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            _buildDiscountAmountInformation()
-                          ],
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    child: const Divider(
-                      height: 2,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  _buildVoucherAmountInformation(),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    child: const Divider(
-                      height: 2,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  _buildPaymentInformation(),
-                  _buildTotalPaymentInformation()
-                ],
-              ),
-            ),
+            _builtBottomContainer(),
           ],
         ),
+      ),
+    );
+  }
+
+  Container _builtBottomContainer() {
+    return Container(
+      padding: const EdgeInsets.only(top: 24),
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 246, 246, 246),
+      ),
+      child: Column(
+        children: [
+          _buildTotalOrderInformation(),
+          Consumer<MenuProvider>(
+            builder: (context, state, _) {
+              if (!state.isVoucherUsed) {
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      child: const Divider(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    _buildDiscountAmountInformation(context)
+                  ],
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            child: const Divider(
+              height: 2,
+              color: Colors.grey,
+            ),
+          ),
+          _buildVoucherAmountInformation(),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            child: const Divider(
+              height: 2,
+              color: Colors.grey,
+            ),
+          ),
+          _buildPaymentInformation(),
+          _buildTotalPaymentInformation()
+        ],
+      ),
+    );
+  }
+
+  Container _builtAppBar(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 66,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: appBarDecoration(context),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/images/sajen_primary.png'),
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    'Pesanan',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -363,44 +371,48 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Container _buildDiscountAmountInformation() {
+  Container _buildDiscountAmountInformation(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/discount_primary.png'),
-          Container(
-            margin: const EdgeInsets.only(left: 8),
-            child: Text(
-              'Diskon 20%',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600, fontSize: 16),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Rp 4.000',
+      child: Consumer<DiscountProvider>(
+        builder: (context, state, _) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/discount_primary.png'),
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: Text(
+                  'Diskon ' + state.totalDiscount.toString() + '%',
                   style: GoogleFonts.montserrat(
-                    color: Colors.red,
-                    fontWeight: FontWeight.w400,
-                  ),
+                      fontWeight: FontWeight.w600, fontSize: 16),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(left: 4),
-                  child: const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.grey,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Rp 4.000',
+                      style: GoogleFonts.montserrat(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 4),
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
