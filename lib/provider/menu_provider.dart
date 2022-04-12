@@ -90,6 +90,8 @@ class MenuProvider extends ChangeNotifier {
       _menuAddedList.add(menuAdd);
     }
 
+    _countTotalPayment();
+
     notifyListeners();
   }
 
@@ -145,7 +147,9 @@ class MenuProvider extends ChangeNotifier {
   }
 
   void _countTotalPayment() {
-    totalPayment = priceTotal - _voucherUsed.nominal!;
+    if (_isVoucherUsed) {
+      totalPayment = priceTotal - _voucherUsed.nominal!;
+    }
     if (totalPayment < 0) {
       totalPayment = 0;
     }

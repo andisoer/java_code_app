@@ -129,26 +129,36 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                               ),
                               Row(
                                 children: [
-                                  Visibility(
-                                    visible:
-                                        menu.menu.jumlah > 0 ? true : false,
-                                    child: TextButton(
-                                      onPressed: () {
-                                        Provider.of<MenuProvider>(
-                                          context,
-                                          listen: false,
-                                        ).removeMenuCount(menu.menu.idMenu);
-                                      },
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: Size.zero,
-                                        side: BorderSide(
-                                          width: 2,
-                                          color: primaryColor,
+                                  Consumer<MenuProvider>(
+                                    builder: (context, state, _) {
+                                      Menu _menu = state.menuResult.data
+                                          .firstWhere((item) =>
+                                              item.idMenu == menu.menu.idMenu);
+                                      return Visibility(
+                                        visible:
+                                            _menu.jumlah > 0 ? true : false,
+                                        child: TextButton(
+                                          onPressed: () {
+                                            Provider.of<MenuProvider>(
+                                              context,
+                                              listen: false,
+                                            ).removeMenuCount(menu.menu.idMenu);
+                                          },
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            minimumSize: Size.zero,
+                                            side: BorderSide(
+                                              width: 2,
+                                              color: primaryColor,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.remove,
+                                            color: primaryColor,
+                                          ),
                                         ),
-                                      ),
-                                      child: const Icon(Icons.remove),
-                                    ),
+                                      );
+                                    },
                                   ),
                                   Consumer<MenuProvider>(
                                     builder: (context, state, _) {
@@ -225,38 +235,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 16),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Tambahkan Ke Pesanan",
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 14,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(24),
-                                ),
-                              ),
-                              primary: primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              minimumSize: const Size.fromHeight(40),
-                              side: const BorderSide(
-                                color: Color.fromARGB(
-                                  255,
-                                  0,
-                                  113,
-                                  127,
-                                ),
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                        ),
+                        _updateButtonAddOrder(menu),
                       ],
                     ),
                     decoration: const BoxDecoration(
@@ -281,6 +260,46 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           );
         }
       },
+    );
+  }
+
+  Container _updateButtonAddOrder(Data menu) {
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      child: ElevatedButton(
+        onPressed: () {
+          Provider.of<MenuProvider>(
+            context,
+            listen: false,
+          ).addMenuCount(menu.menu.idMenu);
+        },
+        child: Text(
+          "Tambahkan Ke Pesanan",
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w800,
+            fontSize: 14,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(24),
+            ),
+          ),
+          primary: primaryColor,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          minimumSize: const Size.fromHeight(40),
+          side: const BorderSide(
+            color: Color.fromARGB(
+              255,
+              0,
+              113,
+              127,
+            ),
+            width: 1,
+          ),
+        ),
+      ),
     );
   }
 

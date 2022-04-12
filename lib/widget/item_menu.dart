@@ -123,7 +123,10 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                         color: primaryColor,
                       ),
                     ),
-                    child: const Icon(Icons.remove),
+                    child: Icon(
+                      Icons.remove,
+                      color: primaryColor,
+                    ),
                   ),
                 ),
                 Text(
