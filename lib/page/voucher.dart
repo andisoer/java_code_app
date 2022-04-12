@@ -123,6 +123,73 @@ class _VoucherPageState extends State<VoucherPage> {
                 ),
               ),
             ),
+            Container(
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: primaryColor,
+                        size: 16,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 8, bottom: 8),
+                          child: Text(
+                            'Penggunaan voucher tidak dapat digabung dengan discount employee reward program',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  ElevatedButton(
+                    child: Text(
+                      'Oke',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(24),
+                        ),
+                      ),
+                      primary: primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      minimumSize: const Size.fromHeight(40),
+                      side: const BorderSide(
+                        color: Color.fromARGB(255, 0, 113, 127),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.only(
+                  top: 12, left: 16, right: 16, bottom: 24),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                    color: Colors.grey.withAlpha(70),
+                    offset: const Offset(0, -3),
+                  ),
+                ],
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                color: Colors.white,
+              ),
+            )
           ],
         ),
       ),
@@ -142,7 +209,7 @@ class _VoucherPageState extends State<VoucherPage> {
         });
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(

@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/voucher.dart';
+import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:java_code_app/widget/item_list_all_menu.dart';
-import 'package:java_code_app/widget/item_menu_shimmer.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -72,14 +71,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
               child: Column(
                 children: [
                   _buildTotalOrderInformation(),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    child: const Divider(
-                      height: 2,
-                      color: Colors.grey,
-                    ),
+                  Consumer<MenuProvider>(
+                    builder: (context, state, _) {
+                      if (!state.isVoucherUsed) {
+                        return Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 12),
+                              child: const Divider(
+                                height: 2,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            _buildDiscountAmountInformation()
+                          ],
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
                   ),
-                  _buildDiscountAmountInformation(),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: const Divider(
@@ -165,28 +176,62 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Pesan Sekarang',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(24),
-                          ),
-                        ),
-                        primary: primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 16),
-                        side: const BorderSide(
-                          color: Color.fromARGB(255, 0, 113, 127),
-                        ),
-                      ),
+                    Consumer<AuthProvider>(
+                      builder: (context, state, _) {
+                        if (state.isBioAuthenticated) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              checkout();
+                            },
+                            child: Text(
+                              'Pesan Sekarang',
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(24),
+                                ),
+                              ),
+                              primary: primaryColor,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 16),
+                              side: const BorderSide(
+                                color: Color.fromARGB(255, 0, 113, 127),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return ElevatedButton(
+                            onPressed: () {
+                              checkout();
+                            },
+                            child: Text(
+                              'Pesan Sekarang',
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(24),
+                                ),
+                              ),
+                              primary: primaryColor,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 16),
+                              side: const BorderSide(
+                                color: Color.fromARGB(255, 0, 113, 127),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -256,19 +301,50 @@ class _CheckoutPageState extends State<CheckoutPage> {
               child: Text(
                 'Voucher',
                 style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w600, fontSize: 16),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
             ),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    'Pilih Voucher',
-                    style: GoogleFonts.montserrat(
-                      color: const Color.fromARGB(255, 46, 46, 46),
-                      fontWeight: FontWeight.w400,
-                    ),
+                  Consumer<MenuProvider>(
+                    builder: (context, state, _) {
+                      if (state.isVoucherUsed) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              state.voucherUsed.nominal.toString(),
+                              style: GoogleFonts.montserrat(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              state.voucherUsed.nama.toString(),
+                              style: GoogleFonts.montserrat(
+                                color: const Color.fromARGB(255, 46, 46, 46),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Text(
+                          'Pilih Voucher',
+                          style: GoogleFonts.montserrat(
+                            color: const Color.fromARGB(255, 46, 46, 46),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        );
+                      }
+                    },
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 4),
@@ -445,6 +521,105 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ),
           );
         }
+      },
+    );
+  }
+
+  void checkout() {
+    showAuthenticateDialog();
+  }
+
+  void showAuthenticateDialog() {
+    AlertDialog authenticateDialog = AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Verifikasi Pesanan',
+            style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w600,
+              fontSize: 22,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: Text(
+              'Finger Print',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: const Color.fromRGBO(150, 150, 150, 1),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Provider.of<AuthProvider>(context, listen: false).authenticate();
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              child: Image.asset('assets/images/finger_print.png'),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Column(
+                  children: const [
+                    Divider(
+                      color: Color.fromARGB(70, 30, 30, 30),
+                      height: 1,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Text(
+                  "atau",
+                  style: TextStyle(
+                    color: Color.fromARGB(70, 30, 30, 30),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: const [
+                    Divider(
+                      color: Color.fromARGB(70, 30, 30, 30),
+                      height: 1,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 16),
+            child: Text(
+              'Verifikasi Menggunakan PIN',
+              style: GoogleFonts.montserrat(
+                color: primaryColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return authenticateDialog;
       },
     );
   }

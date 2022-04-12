@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:java_code_app/common/utils.dart';
 import 'package:java_code_app/data/model/voucher_result.dart';
+import 'package:java_code_app/page/checkout.dart';
+import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/voucher_detail_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
@@ -161,7 +164,15 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '31/12/2021 - 31/12/2021',
+                                    convertEpochToDate(
+                                          voucher.periodeMulai!,
+                                          'dd/MM/yyyy',
+                                        ) +
+                                        ' - ' +
+                                        convertEpochToDate(
+                                          voucher.periodeMulai!,
+                                          'dd/MM/yyyy',
+                                        ),
                                     style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 18,
@@ -191,25 +202,57 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                   ),
                 ),
                 Container(
-                  child: ElevatedButton(
-                    child: Text('Pakai Voucher', style: GoogleFonts.montserrat(fontWeight: FontWeight.w700, fontSize: 16),),
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(24),
+                  child: Consumer<MenuProvider>(
+                    builder: (context, state, _) {
+                      var text = 'Pakai Voucher';
+                      var currentVoucherUsed = false;
+                      if (state.isVoucherUsed) {
+                        if (state.voucherUsed.idVoucher == voucher.idVoucher) {
+                          text = 'Batal Pakai Voucher';
+                          currentVoucherUsed = true;
+                        }
+                      }
+                      return ElevatedButton(
+                        child: Text(
+                          text,
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      primary: primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      minimumSize: const Size.fromHeight(40),
-                      side: const BorderSide(
-                        color: Color.fromARGB(255, 0, 113, 127),
-                        width: 1,
-                      ),
-                    ),
+                        onPressed: () {
+                          if (currentVoucherUsed) {
+                            Provider.of<MenuProvider>(context, listen: false)
+                                .unuseVoucher(voucher);
+                          } else {
+                            Provider.of<MenuProvider>(context, listen: false)
+                                .useVoucher(voucher);
+
+                            Navigator.popUntil(
+                              context,
+                              ModalRoute.withName(CheckoutPage.routeName),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(24),
+                            ),
+                          ),
+                          primary: primaryColor,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          minimumSize: const Size.fromHeight(40),
+                          side: const BorderSide(
+                            color: Color.fromARGB(255, 0, 113, 127),
+                            width: 1,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 24),
+                  padding: const EdgeInsets.only(
+                      top: 12, left: 16, right: 16, bottom: 24),
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(

@@ -3,6 +3,7 @@ import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:collection/collection.dart';
+import 'package:java_code_app/data/model/voucher_result.dart';
 
 enum MenuResourceState { loading, hasData, error, noData }
 
@@ -22,6 +23,14 @@ class MenuProvider extends ChangeNotifier {
   //Tambah ke pesanan sementara ("cart")
   final List<Menu> _menuAddedList = [];
   List<Menu> get menuAddedList => _menuAddedList;
+
+  late Voucher _voucherUsed;
+  Voucher get voucherUsed => _voucherUsed;
+  bool _isVoucherUsed = false;
+  bool get isVoucherUsed => _isVoucherUsed;
+
+  bool _isDiscountUsed = false;
+  bool get isDiscountUsed => _isDiscountUsed;
 
   int menuTotal = 0;
   int priceTotal = 0;
@@ -103,6 +112,8 @@ class MenuProvider extends ChangeNotifier {
       _menuAddedList.removeWhere((item) => item.idMenu == menuId);
     }
 
+    _countTotalPayment();
+
     notifyListeners();
   }
 
@@ -112,5 +123,33 @@ class MenuProvider extends ChangeNotifier {
 
   Menu _findMenu(int menuId) {
     return _menuResult.data.firstWhere((item) => item.idMenu == menuId);
+  }
+
+  void useVoucher(Voucher voucher) {
+    _voucherUsed = voucher;
+    _isVoucherUsed = true;
+
+    _isDiscountUsed = false;
+
+    _countTotalPayment();
+
+    notifyListeners();
+  }
+
+  void unuseVoucher(Voucher voucher) {
+    _isVoucherUsed = false;
+
+    _countTotalPayment();
+
+    notifyListeners();
+  }
+
+  void _countTotalPayment() {
+    totalPayment = priceTotal - _voucherUsed.nominal!;
+    if (totalPayment < 0) {
+      totalPayment = 0;
+    }
+
+    notifyListeners();
   }
 }
