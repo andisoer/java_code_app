@@ -340,7 +340,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           style: GoogleFonts.montserrat(
                             color: const Color.fromARGB(255, 46, 46, 46),
                             fontWeight: FontWeight.w400,
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                         );
                       }

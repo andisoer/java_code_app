@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/common/utils.dart';
 import 'package:java_code_app/data/model/voucher_result.dart';
 import 'package:java_code_app/page/checkout.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/voucher_detail_provider.dart';
+import 'package:java_code_app/provider/voucher_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +71,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
   Consumer<VoucherDetailProvider> _buildPromoInformation() {
     return Consumer<VoucherDetailProvider>(
       builder: (context, state, _) {
-        if (state.resourceState == ResourceState.loading) {
+        if (state.resourceState == VoucherDetailResourceState.loading) {
           return Expanded(
             child: Center(
               child: CircularProgressIndicator(
@@ -79,7 +79,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
               ),
             ),
           );
-        } else if (state.resourceState == ResourceState.hasData) {
+        } else if (state.resourceState == VoucherDetailResourceState.hasData) {
           Voucher voucher = state.voucherResult.data;
           return Expanded(
             child: Column(
@@ -225,8 +225,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                             Provider.of<MenuProvider>(context, listen: false)
                                 .unuseVoucher(voucher);
                           } else {
-                            Provider.of<MenuProvider>(context, listen: false)
-                                .useVoucher(voucher);
+                            useVoucher(voucher);
 
                             Navigator.popUntil(
                               context,
@@ -272,7 +271,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
               ],
             ),
           );
-        } else if (state.resourceState == ResourceState.error) {
+        } else if (state.resourceState == VoucherDetailResourceState.error) {
           return const Center(
             child: Text('error'),
           );
@@ -283,5 +282,9 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
         }
       },
     );
+  }
+
+  void useVoucher(Voucher voucher) {
+    Provider.of<MenuProvider>(context, listen: false).useVoucher(voucher);
   }
 }

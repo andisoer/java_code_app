@@ -5,6 +5,7 @@ import 'package:java_code_app/data/model/voucher_result.dart';
 import 'package:java_code_app/page/detail_voucher.dart';
 import 'package:java_code_app/page/no_internet.dart';
 import 'package:java_code_app/provider/internet_connection_provider.dart';
+import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/voucher_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
@@ -19,6 +20,8 @@ class VoucherPage extends StatefulWidget {
 }
 
 class _VoucherPageState extends State<VoucherPage> {
+  var voucherIdSelected = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -241,21 +244,32 @@ class _VoucherPageState extends State<VoucherPage> {
                   Container(
                     height: 24,
                     width: 24,
-                    child: Checkbox(
-                      side: const BorderSide(
-                        color: Colors.transparent,
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                      ),
-                      checkColor: primaryColor,
-                      activeColor: Colors.transparent,
-                      value: voucher.isSelected,
-                      onChanged: (bool? value) {
-                        Provider.of<VoucherProvider>(context, listen: false)
-                            .selectVoucher(index);
+                    child: Consumer<MenuProvider>(
+                      builder: (context, state, _) {
+                        var voucherSelectedState = false;
+                        if (state.isVoucherUsed) {
+                          if (state.voucherUsed.idVoucher ==
+                              voucher.idVoucher) {
+                            voucherSelectedState = true;
+                          }
+                        }
+
+                        return Checkbox(
+                          side: const BorderSide(
+                            color: Colors.transparent,
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                          ),
+                          checkColor: primaryColor,
+                          activeColor: Colors.transparent,
+                          value: voucherSelectedState,
+                          onChanged: (bool? value) {
+                            
+                          },
+                        );
                       },
                     ),
                     decoration: BoxDecoration(
