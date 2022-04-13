@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:java_code_app/common/navigation.dart';
+import 'package:java_code_app/data/local/shared_preferences_utils.dart';
+import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/provider/discount_provider.dart';
@@ -194,58 +197,77 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               createOrder();
                             },
                           );
-                          return ElevatedButton(
-                            onPressed: () {
-                              checkout();
-                            },
-                            child: Text(
-                              'Pesan Sekarang',
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(24),
-                                ),
-                              ),
-                              primary: primaryColor,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 16),
-                              side: const BorderSide(
-                                color: Color.fromARGB(255, 0, 113, 127),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return ElevatedButton(
-                            onPressed: () {
-                              checkout();
-                            },
-                            child: Text(
-                              'Pesan Sekarang',
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(24),
-                                ),
-                              ),
-                              primary: primaryColor,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 16),
-                              side: const BorderSide(
-                                color: Color.fromARGB(255, 0, 113, 127),
-                              ),
-                            ),
-                          );
                         }
+                        return Consumer<OrderProvider>(
+                          builder: (context, state, _) {
+                            Widget widget;
+                            bool pressable = false;
+                            if (state.resourceState ==
+                                OrderResourceState.loading) {
+                              pressable = false;
+                              widget = const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              );
+                            } else if (state.resourceState ==
+                                OrderResourceState.success) {
+                              pressable = true;
+                              widget = Text(
+                                'Pesan Sekarang',
+                                style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              );
+                              WidgetsBinding.instance?.addPostFrameCallback(
+                                (timeStamp) {
+                                  showOrderSuccessDialog();
+                                },
+                              );
+                            } else if (state.resourceState ==
+                                OrderResourceState.error) {
+                              pressable = true;
+                              widget = Text(
+                                'Pesan Sekarang',
+                                style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              );
+                            } else {
+                              pressable = true;
+                              widget = Text(
+                                'Pesan Sekarang',
+                                style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              );
+                            }
+                            return ElevatedButton(
+                              onPressed: () {
+                                if (pressable) {
+                                  checkout();
+                                }
+                              },
+                              child: widget,
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(24),
+                                  ),
+                                ),
+                                primary: primaryColor,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                side: const BorderSide(
+                                  color: Color.fromARGB(255, 0, 113, 127),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   ],
@@ -579,6 +601,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
           InkWell(
             onTap: () {
+              Navigator.pop(context);
               Provider.of<AuthProvider>(context, listen: false).authenticate();
             },
             child: Container(
@@ -650,6 +673,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   void showPinDialog() {
+    var pin = getUserPin();
+    pin.toString();
     final pinFieldTheme = PinTheme(
       margin: const EdgeInsets.symmetric(horizontal: 2),
       width: 36,
@@ -657,7 +682,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       textStyle:
           GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
         border: Border.all(color: primaryColor),
       ),
     );
@@ -670,6 +697,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30),
+                ),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -709,7 +741,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       Pinput(
                         defaultPinTheme: pinFieldTheme,
                         validator: (s) {
-                          return s == '123456' ? null : 'Pin is incorrect';
+                          return s == pin ? null : 'Pin is incorrect';
                         },
                         pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                         showCursor: true,
@@ -755,6 +787,88 @@ class _CheckoutPageState extends State<CheckoutPage> {
       menuAddedList: menuAddedList,
       discount: totalDiscount,
       voucherId: voucherId,
+    );
+  }
+
+  void showOrderSuccessDialog() {
+    AlertDialog orderSuccessDialog = AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 16),
+            child: Image.asset('assets/images/order_success.png'),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 16),
+            child: Text(
+              'Pesanan Sedang Disiapkan',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w400,
+                fontSize: 22,
+                color: const Color.fromRGBO(30, 30, 30, 1),
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: Text(
+              'Kamu dapat melacak pesananmu di fitur Pesanan',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: const Color.fromRGBO(46, 46, 46, 0.5),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 16, bottom: 8),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.popUntil(
+                  context,
+                  ModalRoute.withName(BottomNavigationMain.routeName),
+                );
+              },
+              child: Text(
+                'Oke',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(24),
+                  ),
+                ),
+                primary: primaryColor,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                minimumSize: const Size.fromHeight(40),
+                side: const BorderSide(
+                  color: Color.fromARGB(255, 0, 113, 127),
+                  width: 1,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return orderSuccessDialog;
+      },
     );
   }
 }

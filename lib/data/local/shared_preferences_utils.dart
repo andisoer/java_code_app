@@ -19,6 +19,7 @@ class SharedPreferencesUtils {
   static const tagAccess = 'access';
   static const tagIsLoggedIn = 'isLoggedIn';
   static const tagToken = 'token';
+  static const tagPin = 'pin';
 
   setPreferences(User user, String token) async {
     await preferences.setInt(tagIdUser, user.idUser!);
@@ -28,6 +29,7 @@ class SharedPreferencesUtils {
     await preferences.setString(tagRolse, user.roles!);
     await preferences.setBool(tagIsLoggedIn, true);
     await preferences.setString(tagToken, token);
+    await preferences.setString(tagPin, user.pin!);
   }
 
   User getUserPreferences() {
@@ -36,12 +38,13 @@ class SharedPreferencesUtils {
     final String? email = preferences.getString(tagEmail);
     final int? rolesId = preferences.getInt(tagRolesId);
     final String? roles = preferences.getString(tagRolse);
+    final String? pin = preferences.getString(tagPin);
 
     User user = User(
       idUser: idUser!,
       email: email!,
       nama: nama!,
-      pin: "",
+      pin: pin,
       foto: "",
       mRolesId: rolesId!,
       isGoogle: 0,

@@ -18,7 +18,7 @@ class AuthProvider extends ChangeNotifier {
   ResourceState get resourceState => _state;
 
   bool _isBioAuthenticated = false;
-  bool get isBioAuthenticated => _isBioAuthenticated; 
+  bool get isBioAuthenticated => _isBioAuthenticated;
 
   Future<dynamic> login({
     required String password,
@@ -57,8 +57,19 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> authenticate() async {
     var localAuth = LocalAuthentication();
-    _isBioAuthenticated =  await localAuth.authenticate(localizedReason: 'Autentikasi untuk melakukan checkout!', biometricOnly: true);
+    _isBioAuthenticated = await localAuth.authenticate(
+      localizedReason: 'Autentikasi untuk melakukan checkout!',
+      biometricOnly: true,
+    );
 
     notifyListeners();
   }
+}
+
+Future<String> getUserPin() async {
+  SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+  await _preferences.init();
+  var pin = _preferences.getUserPreferences().pin;
+
+  return pin!;
 }

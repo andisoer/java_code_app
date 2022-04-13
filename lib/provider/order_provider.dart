@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
-import 'package:java_code_app/data/model/auth_result.dart';
 import 'package:java_code_app/data/model/create_order_result.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
-import 'package:local_auth/local_auth.dart';
 
-enum ResourceState { loading, success, error, none }
+enum OrderResourceState { loading, success, error, none }
 
 class OrderProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -16,8 +14,8 @@ class OrderProvider extends ChangeNotifier {
   late CreateOrderResult _orderResult;
   CreateOrderResult get orderResult => _orderResult;
 
-  ResourceState _state = ResourceState.none;
-  ResourceState get resourceState => _state;
+  OrderResourceState _state = OrderResourceState.none;
+  OrderResourceState get resourceState => _state;
 
   Future<dynamic> createOrder({
     int? voucherId,
@@ -25,9 +23,8 @@ class OrderProvider extends ChangeNotifier {
     required int totalPayment,
     required List<Menu> menuAddedList,
   }) async {
-    print(totalPayment);
     try {
-      _state = ResourceState.loading;
+      _state = OrderResourceState.loading;
       notifyListeners();
 
       SharedPreferencesUtils _preferences = SharedPreferencesUtils();
@@ -45,16 +42,16 @@ class OrderProvider extends ChangeNotifier {
       );
 
       if (data.statusCode == 200) {
-        _state = ResourceState.success;
+        _state = OrderResourceState.success;
 
         notifyListeners();
         return _orderResult = data;
       } else {
-        _state = ResourceState.error;
+        _state = OrderResourceState.error;
         notifyListeners();
       }
     } catch (e) {
-      _state = ResourceState.error;
+      _state = OrderResourceState.error;
       notifyListeners();
     }
   }
