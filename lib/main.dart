@@ -20,6 +20,7 @@ import 'package:java_code_app/provider/discount_provider.dart';
 import 'package:java_code_app/provider/location_provider.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
+import 'package:java_code_app/provider/order_provider.dart';
 import 'package:java_code_app/provider/promo_detail_provider.dart';
 import 'package:java_code_app/provider/promo_provider.dart';
 import 'package:java_code_app/provider/voucher_detail_provider.dart';
@@ -71,6 +72,11 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (_) => DiscountProvider(
+            apiService: ApiService(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OrderProvider(
             apiService: ApiService(),
           ),
         ),

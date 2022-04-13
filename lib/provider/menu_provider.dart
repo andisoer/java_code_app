@@ -36,9 +36,10 @@ class MenuProvider extends ChangeNotifier {
   int menuTotal = 0;
   int priceTotal = 0;
 
-  int dicountAmount = 0;
-  int voucherAmount = 0;
   int totalPayment = 0;
+  int voucherNominal = 0;
+
+  int totalDiscountNominal = 0;
 
   Future<dynamic> fetchMenu({required String type}) async {
     try {
@@ -149,6 +150,7 @@ class MenuProvider extends ChangeNotifier {
 
   void _countTotalPayment() {
     if (_isVoucherUsed) {
+      totalDiscountNominal = _voucherUsed.nominal!;
       totalPayment = priceTotal - _voucherUsed.nominal!;
     }
     if (totalPayment < 0) {

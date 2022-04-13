@@ -4,9 +4,11 @@ import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/provider/discount_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
+import 'package:java_code_app/provider/order_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:java_code_app/widget/item_list_all_menu.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -187,6 +189,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     Consumer<AuthProvider>(
                       builder: (context, state, _) {
                         if (state.isBioAuthenticated) {
+                          WidgetsBinding.instance?.addPostFrameCallback(
+                            (timeStamp) {
+                              createOrder();
+                            },
+                          );
                           return ElevatedButton(
                             onPressed: () {
                               checkout();
@@ -613,14 +620,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
               )
             ],
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 16),
-            child: Text(
-              'Verifikasi Menggunakan PIN',
-              style: GoogleFonts.montserrat(
-                color: primaryColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              showPinDialog();
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 16),
+              child: Text(
+                'Verifikasi Menggunakan PIN',
+                style: GoogleFonts.montserrat(
+                  color: primaryColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
               ),
             ),
           )
@@ -633,6 +646,115 @@ class _CheckoutPageState extends State<CheckoutPage> {
       builder: (BuildContext context) {
         return authenticateDialog;
       },
+    );
+  }
+
+  void showPinDialog() {
+    final pinFieldTheme = PinTheme(
+      margin: const EdgeInsets.symmetric(horizontal: 2),
+      width: 36,
+      height: 36,
+      textStyle:
+          GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.w600),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border: Border.all(color: primaryColor),
+      ),
+    );
+
+    showDialog(
+      context: (context),
+      builder: (BuildContext context) {
+        bool _isPasswordVisible = false;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Verifikasi Pesanan',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      'Masukkan kode PIN',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: const Color.fromRGBO(150, 150, 150, 1),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: const Color.fromARGB(70, 0, 0, 0),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                  Row(
+                    children: [
+                      Pinput(
+                        defaultPinTheme: pinFieldTheme,
+                        validator: (s) {
+                          return s == '123456' ? null : 'Pin is incorrect';
+                        },
+                        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                        showCursor: true,
+                        onCompleted: (pin) {
+                          Navigator.pop(context);
+                          createOrder();
+                        },
+                        length: 6,
+                        separatorPositions: const [2, 4],
+                        separator: const Text('-'),
+                        obscuringCharacter: '*',
+                        obscureText: _isPasswordVisible,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void createOrder() {
+    var isVoucherUsed =
+        Provider.of<MenuProvider>(context, listen: false).isVoucherUsed;
+    int? voucherId;
+    if (isVoucherUsed) {
+      voucherId = Provider.of<MenuProvider>(context, listen: false)
+          .voucherUsed
+          .idVoucher;
+    }
+    var totalDiscount =
+        Provider.of<MenuProvider>(context, listen: false).totalDiscountNominal;
+    var totalPayment =
+        Provider.of<MenuProvider>(context, listen: false).totalPayment;
+    var menuAddedList =
+        Provider.of<MenuProvider>(context, listen: false).menuAddedList;
+
+    Provider.of<OrderProvider>(context, listen: false).createOrder(
+      totalPayment: totalPayment,
+      menuAddedList: menuAddedList,
+      discount: totalDiscount,
+      voucherId: voucherId,
     );
   }
 }

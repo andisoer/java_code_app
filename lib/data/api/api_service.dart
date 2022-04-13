@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:java_code_app/data/model/auth_result.dart';
+import 'package:java_code_app/data/model/create_order_result.dart';
 import 'package:java_code_app/data/model/discount_result.dart';
 import 'package:java_code_app/data/model/menu_detail_result.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
@@ -161,7 +162,7 @@ class ApiService {
     }
   }
 
-   Future<DiscountResult> fetchDiscountByUserId({
+  Future<DiscountResult> fetchDiscountByUserId({
     required String token,
     required int userId,
   }) async {
@@ -176,6 +177,52 @@ class ApiService {
       return DiscountResult.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to fetch voucher');
+    }
+  }
+
+  Future<CreateOrderResult> createOrder({
+    required String token,
+    required int userId,
+    int? voucherId = 0,
+    int? discount = 0,
+    required int totalPayment,
+    required List<Menu> menuAddedList,
+  }) async {
+    List<dynamic> menu = [];
+    for (var _menu in menuAddedList) {
+      menu.add({
+        'id_menu': _menu.idMenu,
+        'harga': _menu.harga,
+        'level': _menu.level,
+        'topping': _menu.topping,
+        'jumlah': _menu.jumlah
+      });
+    }
+
+    var body = jsonEncode(<String, dynamic>{
+      'order': {
+        'id_user': userId,
+        'id_voucher': voucherId,
+        'potongan': discount,
+        'total_bayar': totalPayment
+      },
+      'menu': menu
+    });
+
+    print(body);
+
+    final response = await http.post(
+      Uri.parse(_baseUrl + 'order/add'),
+      headers: {"token": token, "Content-Type": "application/json"},
+      body: body,
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return CreateOrderResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to create order');
     }
   }
 }
