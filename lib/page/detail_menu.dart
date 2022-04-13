@@ -442,11 +442,6 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                       if (toppingAdded != null) {
                         text += toppingAdded.keterangan + ', ';
                       }
-
-                      // if (_menu.topping![i].toString() ==
-                      //     topping[i].idDetail.toString()) {
-                      //   text += topping[i].keterangan + ', ';
-                      // }
                     }
 
                     if (_menu.topping!.isEmpty) {
