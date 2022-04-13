@@ -173,12 +173,20 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void chooseTopping(int menuId, List<int> toppings) {
+  void chooseTopping(int menuId, int topping) {
     int index = _findMenuIndex(menuId);
 
-    _menuResult.data[index].topping?.addAll(toppings);
+    if (_menuResult.data[index].topping == null) {
+      _menuResult.data[index].topping = [];
+    }
+
+    if (_menuResult.data[index].topping!.contains(topping)) {
+      _menuResult.data[index].topping!
+          .removeWhere((toppingId) => toppingId == topping);
+    } else {
+      _menuResult.data[index].topping?.add(topping);
+    }
 
     notifyListeners();
   }
-
 }

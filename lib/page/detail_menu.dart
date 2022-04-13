@@ -225,7 +225,8 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        _builtToppingInformation(context, menu.topping, menu.menu.idMenu),
+                        _builtToppingInformation(
+                            context, menu.topping, menu.menu.idMenu),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           child: const Divider(
@@ -429,13 +430,27 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
             children: [
               Consumer<MenuProvider>(
                 builder: (context, state, _) {
-                  var text = 'Pilih topping';
-                  var _menu = state.menuResult.data.firstWhere((item) => item.idMenu == menuId);
+                  var text = 'Pilih Topping';
+                  var _menu = state.menuResult.data
+                      .firstWhere((item) => item.idMenu == menuId);
                   if (_menu.topping != null) {
+                    text = '';
                     for (var i = 0; i < _menu.topping!.length; i++) {
-                      if (_menu.topping![i].toString() == topping[i].keterangan.toString()) {
-                        text += topping[i].keterangan+', ';
+                      var toppingAdded = topping.firstWhereOrNull(
+                          (_topping) => _topping.idDetail == _menu.topping![i]);
+
+                      if (toppingAdded != null) {
+                        text += toppingAdded.keterangan + ', ';
                       }
+
+                      // if (_menu.topping![i].toString() ==
+                      //     topping[i].idDetail.toString()) {
+                      //   text += topping[i].keterangan + ', ';
+                      // }
+                    }
+
+                    if (_menu.topping!.isEmpty) {
+                      text = 'Pilih Topping';
                     }
                   }
 
@@ -634,7 +649,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
     );
   }
 
-  Wrap _showBottomSheetTopping(List<dynamic> topping, int menuId) {
+  Wrap _showBottomSheetTopping(List<Topping> topping, int menuId) {
     return Wrap(
       children: [
         Container(
@@ -662,36 +677,53 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 8),
-                child: topping.isNotEmpty
-                    ? Wrap(
-                        direction: Axis.horizontal,
-                        children: [
-                          for (var item in topping)
-                            InkWell(
-                              onTap: () {
-                                Provider.of<MenuProvider>(context, listen: false).chooseTopping(menuId, item);
-                              },
-                              child: _buildItemChip(
-                                text: item.keterangan,
-                                selected: false,
+              Consumer<MenuProvider>(
+                builder: (context, state, _) {
+                  var _menu = state.menuResult.data
+                      .firstWhere((item) => item.idMenu == menuId);
+                  List<int> _addedTopping = [];
+                  if (_menu.topping != null) {
+                    _addedTopping.addAll(_menu.topping!);
+                  }
+
+                  return Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    child: topping.isNotEmpty
+                        ? Wrap(
+                            direction: Axis.horizontal,
+                            children: [
+                              for (var _item in topping)
+                                InkWell(
+                                  onTap: () {
+                                    var toppingId = _item.idDetail;
+                                    Provider.of<MenuProvider>(context,
+                                            listen: false)
+                                        .chooseTopping(menuId, toppingId);
+                                  },
+                                  child: _buildItemChip(
+                                    text: _item.keterangan,
+                                    selected:
+                                        _addedTopping.contains(_item.idDetail)
+                                            ? true
+                                            : false,
+                                  ),
+                                )
+                            ],
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Center(
+                              child: Text(
+                                'Tidak ada topping untuk menu ini',
+                                style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
                               ),
-                            )
-                        ],
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Center(
-                          child: Text(
-                            'Tidak ada topping untuk menu ini',
-                            style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
                             ),
                           ),
-                        ),
-                      ),
+                  );
+                },
               )
             ],
           ),
