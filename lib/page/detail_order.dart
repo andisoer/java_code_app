@@ -24,14 +24,13 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
           children: [
             _builtAppBar(context),
             _buildMenuList(),
-            _builtBottomContainer(),
           ],
         ),
       ),
     );
   }
 
-  Container _builtBottomContainer() {
+  Container _builtBottomContainer(int statusOrder) {
     return Container(
       padding: const EdgeInsets.only(top: 24),
       decoration: const BoxDecoration(
@@ -61,13 +60,6 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
             ),
           ),
           _buildVoucherAmountInformation(),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
           _buildPaymentInformation(),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 12),
@@ -86,7 +78,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               ),
             ),
           ),
-          _buildOrderStatusStepper(),
+          _buildOrderStatusStepper(statusOrder),
           _buildOrderStatusDescription(),
         ],
       ),
@@ -145,170 +137,115 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
     );
   }
 
-  Container _buildOrderStatusStepper() {
+  Container _buildOrderStatusStepper(int statusOrder) {
     return Container(
-      margin: const EdgeInsets.only(left: 34, right: 34, top: 16),
-      child: Consumer<OrderHistoryDetailProvider>(
-        builder: (context, state, _) {
-          if (state.resourceState == ResourceState.hasData) {
-            var statusOrder = state.orderHistoryDetailResult.data.order.status;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                statusOrder == 0 || statusOrder == 1
-                    ? Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 2,
-                              color: Colors.grey.withOpacity(0.5),
-                              offset: const Offset(0, 1),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.check_circle,
-                          size: 24,
-                          color: primaryColor,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.circle,
-                        size: 12,
-                        color: Color.fromARGB(70, 30, 30, 30),
-                      ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(
-                      children: const [
-                        Divider(
-                          color: Color.fromARGB(70, 30, 30, 30),
-                          height: 1,
-                        ),
+        margin: const EdgeInsets.only(left: 34, right: 34, top: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            statusOrder == 0 || statusOrder == 1
+                ? Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 2,
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: const Offset(0, 1),
+                        )
                       ],
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white,
                     ),
+                    child: Icon(
+                      Icons.check_circle,
+                      size: 24,
+                      color: primaryColor,
+                    ),
+                  )
+                : const Icon(
+                    Icons.circle,
+                    size: 12,
+                    color: Color.fromARGB(70, 30, 30, 30),
                   ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  children: const [
+                    Divider(
+                      color: Color.fromARGB(70, 30, 30, 30),
+                      height: 1,
+                    ),
+                  ],
                 ),
-                statusOrder == 2
-                    ? Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 2,
-                              color: Colors.grey.withOpacity(0.5),
-                              offset: const Offset(0, 1),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.check_circle,
-                          size: 24,
-                          color: primaryColor,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.circle,
-                        size: 12,
-                        color: Color.fromARGB(70, 30, 30, 30),
-                      ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(
-                      children: const [
-                        Divider(
-                          color: Color.fromARGB(70, 30, 30, 30),
-                          height: 1,
-                        ),
+              ),
+            ),
+            statusOrder == 2
+                ? Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 2,
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: const Offset(0, 1),
+                        )
                       ],
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white,
                     ),
+                    child: Icon(
+                      Icons.check_circle,
+                      size: 24,
+                      color: primaryColor,
+                    ),
+                  )
+                : const Icon(
+                    Icons.circle,
+                    size: 12,
+                    color: Color.fromARGB(70, 30, 30, 30),
                   ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  children: const [
+                    Divider(
+                      color: Color.fromARGB(70, 30, 30, 30),
+                      height: 1,
+                    ),
+                  ],
                 ),
-                statusOrder == 3
-                    ? Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 2,
-                              color: Colors.grey.withOpacity(0.5),
-                              offset: const Offset(0, 1),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.check_circle,
-                          size: 24,
-                          color: primaryColor,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.circle,
-                        size: 12,
-                        color: Color.fromARGB(70, 30, 30, 30),
-                      )
-              ],
-            );
-          } else {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.circle,
-                  size: 12,
-                  color: Color.fromARGB(70, 30, 30, 30),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(
-                      children: const [
-                        Divider(
-                          color: Color.fromARGB(70, 30, 30, 30),
-                          height: 1,
-                        ),
+              ),
+            ),
+            statusOrder == 3
+                ? Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 2,
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: const Offset(0, 1),
+                        )
                       ],
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white,
                     ),
-                  ),
-                ),
-                const Icon(
-                  Icons.circle,
-                  size: 12,
-                  color: Color.fromARGB(70, 30, 30, 30),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(
-                      children: const [
-                        Divider(
-                          color: Color.fromARGB(70, 30, 30, 30),
-                          height: 1,
-                        ),
-                      ],
+                    child: Icon(
+                      Icons.check_circle,
+                      size: 24,
+                      color: primaryColor,
                     ),
-                  ),
-                ),
-                const Icon(
-                  Icons.circle,
-                  size: 12,
-                  color: Color.fromARGB(70, 30, 30, 30),
-                )
-              ],
-            );
-          }
-        },
-      ),
-    );
+                  )
+                : const Icon(
+                    Icons.circle,
+                    size: 12,
+                    color: Color.fromARGB(70, 30, 30, 30),
+                  )
+          ],
+        ));
   }
 
   Container _builtAppBar(BuildContext context) {
@@ -394,72 +331,84 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
     );
   }
 
-  InkWell _buildVoucherAmountInformation() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/voucher_outline_primary.png'),
-            Container(
-              margin: const EdgeInsets.only(left: 8),
-              child: Text(
-                'Voucher',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+  Consumer _buildVoucherAmountInformation() {
+    return Consumer<OrderHistoryDetailProvider>(
+      builder: (context, state, _) {
+        if (state.isVoucherUsed) {
+          return Column(
+            children: [
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'nominal',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
+                      Image.asset('assets/images/voucher_outline_primary.png'),
+                      Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        child: Text(
+                          'Voucher',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                      Text(
-                        'nama',
-                        style: GoogleFonts.montserrat(
-                          color: const Color.fromARGB(255, 46, 46, 46),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10,
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '${state.orderHistoryDetailResult.data.order.potongan}',
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(
+                                  'nama',
+                                  style: GoogleFonts.montserrat(
+                                    color:
+                                        const Color.fromARGB(255, 46, 46, 46),
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 4),
+                              child: const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                            )
+                          ],
                         ),
-                      ),
+                      )
                     ],
                   ),
-                  Text(
-                    'Pilih Voucher',
-                    style: GoogleFonts.montserrat(
-                      color: const Color.fromARGB(255, 46, 46, 46),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                  )
-                ],
+                ),
               ),
-            )
-          ],
-        ),
-      ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                child: const Divider(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 
@@ -523,12 +472,13 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                   ),
                 ),
                 Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: Text(
-                      '(3 menu)',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400, fontSize: 16),
-                    )),
+                  margin: const EdgeInsets.only(left: 4),
+                  child: Text(
+                    '(${state.totalMenu} menu)',
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w400, fontSize: 16),
+                  ),
+                ),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -646,17 +596,26 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
             allMenuList.addAll(foodMenuList);
             allMenuList.addAll(drinkMenuList);
 
+            int statusOrder = state.orderHistoryDetailResult.data.order.status;
+
             return Expanded(
-              child: SingleChildScrollView(
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final item = allMenuList[index];
-                    return item.buildItemWidget(context);
-                  },
-                  itemCount: allMenuList.length,
-                ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final item = allMenuList[index];
+                          return item.buildItemWidget(context);
+                        },
+                        itemCount: allMenuList.length,
+                      ),
+                    ),
+                  ),
+                  _builtBottomContainer(statusOrder),
+                ],
               ),
             );
           } else {
