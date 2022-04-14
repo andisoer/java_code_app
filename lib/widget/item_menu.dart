@@ -7,6 +7,7 @@ import 'package:java_code_app/page/no_internet.dart';
 import 'package:java_code_app/provider/internet_connection_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/style/colors.dart';
+import 'package:java_code_app/style/style.dart';
 import 'package:provider/provider.dart';
 
 InkWell buildItemMenu(BuildContext context, Menu menu) {
@@ -26,20 +27,7 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
         vertical: 8,
         horizontal: 10,
       ),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 246, 246, 246),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 2,
-            spreadRadius: 2,
-            color: Colors.grey.withAlpha(70),
-            offset: const Offset(0, 2),
-          ),
-        ],
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
-        ),
-      ),
+      decoration: cardDecoration(),
       child: Row(
         children: [
           Container(

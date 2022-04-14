@@ -16,3 +16,20 @@ BoxDecoration appBarDecoration(BuildContext context) {
     ],
   );
 }
+
+BoxDecoration cardDecoration() {
+  return BoxDecoration(
+    color: const Color.fromARGB(255, 246, 246, 246),
+    boxShadow: [
+      BoxShadow(
+        blurRadius: 2,
+        spreadRadius: 2,
+        color: Colors.grey.withAlpha(70),
+        offset: const Offset(0, 2),
+      ),
+    ],
+    borderRadius: const BorderRadius.all(
+      Radius.circular(12),
+    ),
+  );
+}

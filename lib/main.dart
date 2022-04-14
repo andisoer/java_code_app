@@ -9,6 +9,7 @@ import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/check_location.dart';
 import 'package:java_code_app/page/checkout.dart';
 import 'package:java_code_app/page/detail_menu.dart';
+import 'package:java_code_app/page/detail_order.dart';
 import 'package:java_code_app/page/detail_promo.dart';
 import 'package:java_code_app/page/detail_voucher.dart';
 import 'package:java_code_app/page/home.dart';
@@ -20,6 +21,8 @@ import 'package:java_code_app/provider/discount_provider.dart';
 import 'package:java_code_app/provider/location_provider.dart';
 import 'package:java_code_app/provider/menu_detail_provider.dart';
 import 'package:java_code_app/provider/menu_provider.dart';
+import 'package:java_code_app/provider/order_history_detail_provider.dart';
+import 'package:java_code_app/provider/order_history_provider.dart';
 import 'package:java_code_app/provider/order_provider.dart';
 import 'package:java_code_app/provider/promo_detail_provider.dart';
 import 'package:java_code_app/provider/promo_provider.dart';
@@ -80,6 +83,11 @@ class _MyAppState extends State<MyApp> {
             apiService: ApiService(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => OrderHistoryProvider(
+            apiService: ApiService(),
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => LocationProvider())
       ],
       child: MaterialApp(
@@ -119,6 +127,13 @@ class _MyAppState extends State<MyApp> {
                   voucherId: ModalRoute.of(context)?.settings.arguments as int,
                 ),
                 child: const DetailVoucherPage(),
+              ),
+          DetailOrderPage.routeName: (context) => ChangeNotifierProvider(
+                create: (_) => OrderHistoryDetailProvider(
+                  apiService: ApiService(),
+                  orderId: ModalRoute.of(context)?.settings.arguments as int,
+                ),
+                child: const DetailOrderPage(),
               ),
         },
         navigatorKey: navigatorKey,

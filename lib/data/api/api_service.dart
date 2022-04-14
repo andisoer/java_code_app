@@ -5,6 +5,8 @@ import 'package:java_code_app/data/model/create_order_result.dart';
 import 'package:java_code_app/data/model/discount_result.dart';
 import 'package:java_code_app/data/model/menu_detail_result.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
+import 'package:java_code_app/data/model/order_history_detail_result.dart';
+import 'package:java_code_app/data/model/order_history_result.dart';
 import 'package:java_code_app/data/model/promo_detail_result.dart';
 import 'package:java_code_app/data/model/promo_result.dart';
 import 'package:http/http.dart' as http;
@@ -209,20 +211,55 @@ class ApiService {
       'menu': menu
     });
 
-    print(body);
-
     final response = await http.post(
       Uri.parse(_baseUrl + 'order/add'),
       headers: {"token": token, "Content-Type": "application/json"},
       body: body,
     );
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       return CreateOrderResult.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to create order');
+    }
+  }
+
+  Future<OrderHistoryResult> fetchOrderHistoryByUser({
+    required int id,
+    required String token,
+  }) async {
+    final response = await http.get(
+      Uri.parse(_baseUrl + 'order/user/' + id.toString()),
+      headers: {
+        "token": token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return OrderHistoryResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch order histories');
+    }
+  }
+
+  Future<OrderHistoryDetailResult> fetchOrderHistoryDetail({
+    required int id,
+    required String token,
+  }) async {
+    final response = await http.get(
+      Uri.parse(_baseUrl + 'order/detail/' + id.toString()),
+      headers: {
+        "token": token,
+      },
+    );
+
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      return OrderHistoryDetailResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch order history detail');
     }
   }
 }

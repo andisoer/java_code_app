@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:java_code_app/common/navigation.dart';
-import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/page/bottom_navigation_main.dart';
 import 'package:java_code_app/page/voucher.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
