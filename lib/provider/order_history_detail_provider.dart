@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/order_history_detail_result.dart';
+import 'package:java_code_app/data/model/voucher_result.dart';
 
 enum ResourceState { loading, hasData, error, noData }
 
@@ -19,8 +20,6 @@ class OrderHistoryDetailProvider extends ChangeNotifier {
   late ResourceState _state;
   ResourceState get resourceState => _state;
 
-  bool _isVoucherUsed = false;
-
   int menuTotal = 0;
   int priceTotal = 0;
 
@@ -28,6 +27,12 @@ class OrderHistoryDetailProvider extends ChangeNotifier {
   int voucherNominal = 0;
 
   int totalDiscountNominal = 0;
+
+  int _totalMenu = 0;
+  int get totalMenu => _totalMenu;
+
+  bool _isVoucherUsed = false;
+  bool get isVoucherUsed => _isVoucherUsed;
 
   Future<dynamic> _fetchOrderHistoryDetail({required int orderId}) async {
     try {
@@ -47,7 +52,13 @@ class OrderHistoryDetailProvider extends ChangeNotifier {
         notifyListeners();
         _orderHistoryDetailResult = data;
 
-        
+        for (var itemMenu in data.data.detail) {
+          _totalMenu += itemMenu.jumlah!;
+        }
+
+        if (data.data.order.idVoucher != 0) {
+          _isVoucherUsed = true;
+        }
 
         return _orderHistoryDetailResult;
       } else {
