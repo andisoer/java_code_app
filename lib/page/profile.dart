@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:java_code_app/page/login_page.dart';
+import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 
@@ -83,135 +85,8 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 16),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                              color: const Color.fromRGBO(246, 246, 246, 1),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 2,
-                                  spreadRadius: 2,
-                                  color: Colors.grey.withAlpha(70),
-                                )
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Device Info',
-                                      style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Iphone 13',
-                                          style: GoogleFonts.montserrat(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 4),
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 16,
-                                            color: Colors.grey,
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                  child: const Divider(
-                                    height: 2,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Version',
-                                      style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '1.3',
-                                          style: GoogleFonts.montserrat(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 4),
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 16,
-                                            color: Colors.grey,
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Log out',
-                                    style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(24),
-                                      ),
-                                    ),
-                                    primary: primaryColor,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16, horizontal: 64),
-                                    side: const BorderSide(
-                                      color: Color.fromARGB(255, 0, 113, 127),
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
+                          _builtOtherInfo(),
+                          _buildLogoutButton(context)
                         ],
                       ),
                     )
@@ -222,6 +97,135 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Container _builtOtherInfo() {
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20),
+        ),
+        color: const Color.fromRGBO(246, 246, 246, 1),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 2,
+            spreadRadius: 2,
+            color: Colors.grey.withAlpha(70),
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Device Info',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Iphone 13',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 4),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            child: const Divider(
+              height: 2,
+              color: Colors.grey,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Version',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              Row(
+                children: [
+                  Text(
+                    '1.3',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 4),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Row _buildLogoutButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          child: ElevatedButton(
+            onPressed: () {
+              logout(context);
+            },
+            child: Text(
+              'Log out',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(24),
+                ),
+              ),
+              primary: primaryColor,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 64),
+              side: const BorderSide(
+                color: Color.fromARGB(255, 0, 113, 127),
+                width: 1,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -535,6 +539,18 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void logout(BuildContext context) {
+    clearPreferences().then(
+      (loggedOut) => {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          LoginPage.routeName,
+          (route) => false,
+        )
+      },
     );
   }
 }
