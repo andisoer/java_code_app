@@ -278,4 +278,25 @@ class ApiService {
       throw Exception('Failed to fetch detail profile');
     }
   }
+
+  Future<ProfileResult> updateProfile({
+    required int id,
+    required String token,
+    required String key,
+    required dynamic value,
+  }) async {
+    var body = jsonEncode(<String, dynamic>{key: value});
+
+    final response = await http.post(
+      Uri.parse(_baseUrl + 'user/update/' + id.toString()),
+      headers: {"token": token, "Content-Type": "application/json"},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return ProfileResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch update profile!');
+    }
+  }
 }

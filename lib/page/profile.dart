@@ -7,8 +7,15 @@ import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  var savedValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -292,132 +299,196 @@ class ProfilePage extends StatelessWidget {
             var user = state.profileResult.data;
             return Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Nama',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          user.nama ?? '-',
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          ),
+                InkWell(
+                  onTap: () {
+                    showBottomSheet(
+                      elevation: 24,
+                      context: context,
+                      builder: (context) {
+                        return _showBottomSheetUpdateProfile(
+                          context,
+                          'nama',
+                          'Nama',
+                          user.nama ?? '',
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Nama',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 4),
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: Colors.grey,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            user.nama ?? '-',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          Container(
+                            margin: const EdgeInsets.only(left: 4),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
                 buildHorizontalBorder(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Tanggal Lahir',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          user.tglLahir ?? '-',
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          ),
+                InkWell(
+                  onTap: () {
+                    showBottomSheet(
+                      elevation: 24,
+                      context: context,
+                      builder: (context) {
+                        return _showBottomSheetUpdateProfile(
+                          context,
+                          'tgl_lahir',
+                          'Tanggal Lahir',
+                          user.tglLahir ?? '',
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Tanggal Lahir',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 4),
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: Colors.grey,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            user.tglLahir ?? '-',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                  ],
+                          Container(
+                            margin: const EdgeInsets.only(left: 4),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 buildHorizontalBorder(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'No.Telepon',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          user.telepon ?? '-',
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          ),
+                InkWell(
+                  onTap: () {
+                    showBottomSheet(
+                      elevation: 24,
+                      context: context,
+                      builder: (context) {
+                        return _showBottomSheetUpdateProfile(
+                          context,
+                          'telepon',
+                          'No.Telepon',
+                          user.telepon ?? '',
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'No.Telepon',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 4),
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: Colors.grey,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            user.telepon ?? '-',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          Container(
+                            margin: const EdgeInsets.only(left: 4),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
                 buildHorizontalBorder(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Email',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          user.email ?? '-',
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          ),
+                InkWell(
+                  onTap: () {
+                    showBottomSheet(
+                      elevation: 24,
+                      context: context,
+                      builder: (context) {
+                        return _showBottomSheetUpdateProfile(
+                          context,
+                          'email',
+                          'Email',
+                          user.email ?? '',
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Email',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 4),
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: Colors.grey,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            user.email ?? '-',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          Container(
+                            margin: const EdgeInsets.only(left: 4),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
                 buildHorizontalBorder(),
                 Row(
@@ -543,5 +614,86 @@ class ProfilePage extends StatelessWidget {
         )
       },
     );
+  }
+
+  Wrap _showBottomSheetUpdateProfile(
+    BuildContext context,
+    String key,
+    String label,
+    String initialValue,
+  ) {
+    return Wrap(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                child: Divider(
+                  indent: MediaQuery.of(context).size.width * 1 / 5,
+                  endIndent: MediaQuery.of(context).size.width * 1 / 5,
+                  height: 2,
+                  thickness: 3,
+                  color: Colors.grey.withAlpha(70),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                child: Text(
+                  'Update $label',
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: TextEditingController()..text = initialValue,
+                      onChanged: (value) {
+                        savedValue = value;
+                      },
+                      maxLength: 100,
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 2,
+                          color: Colors.grey.withAlpha(100),
+                        )
+                      ],
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: primaryColor,
+                      child: IconButton(
+                        color: Colors.white,
+                        onPressed: () {
+                          updateProfile(key, savedValue);
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.check),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void updateProfile(String key, String savedValue) {
+    Provider.of<ProfileProvider>(context, listen: false)
+        .updateUserProfile(key: key, value: savedValue);
   }
 }

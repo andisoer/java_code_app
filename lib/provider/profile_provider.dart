@@ -63,4 +63,41 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
     return _deviceInfo;
   }
+
+  Future<dynamic> updateUserProfile({
+    required String key,
+    required dynamic value,
+  }) async {
+    try {
+      _state = ProfileResourceState.loading;
+      notifyListeners();
+
+      SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+      await _preferences.init();
+      var token = _preferences.getToken();
+      var userId = _preferences.getUserPreferences().idUser;
+
+      print(key + ':' + value);
+
+      final data = await apiService.updateProfile(
+        token: token,
+        id: userId!,
+        key: key,
+        value: value,
+      );
+      if (data.statusCode == 200) {
+        _state = ProfileResourceState.success;
+        fetchUserProfile();
+        notifyListeners();
+        return _profileResult = data;
+      } else {
+        _state = ProfileResourceState.none;
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+      _state = ProfileResourceState.error;
+      notifyListeners();
+    }
+  }
 }
