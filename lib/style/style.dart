@@ -33,3 +33,13 @@ BoxDecoration cardDecoration() {
     ),
   );
 }
+
+Container buildHorizontalBorder() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      child: const Divider(
+        height: 2,
+        color: Colors.grey,
+      ),
+    );
+  }

@@ -51,6 +51,7 @@ dependencies:
   pinput: ^2.2.7
   loadmore: ^2.0.1
   date_range_picker: ^1.0.7
+  device_info_plus: ^3.2.3
 
 dev_dependencies:
   flutter_test:

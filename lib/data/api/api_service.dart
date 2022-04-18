@@ -7,6 +7,7 @@ import 'package:java_code_app/data/model/menu_detail_result.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
 import 'package:java_code_app/data/model/order_history_detail_result.dart';
 import 'package:java_code_app/data/model/order_history_result.dart';
+import 'package:java_code_app/data/model/profile_result.dart';
 import 'package:java_code_app/data/model/promo_detail_result.dart';
 import 'package:java_code_app/data/model/promo_result.dart';
 import 'package:http/http.dart' as http;
@@ -228,7 +229,6 @@ class ApiService {
     required int id,
     required String token,
   }) async {
-
     final response = await http.get(
       Uri.parse(_baseUrl + 'order/user/' + id.toString()),
       headers: {
@@ -254,13 +254,28 @@ class ApiService {
       },
     );
 
-    print(response.body);
-    print(response.statusCode);
-
     if (response.statusCode == 200) {
       return OrderHistoryDetailResult.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to fetch order history detail');
+    }
+  }
+
+  Future<ProfileResult> fetchUserProfile({
+    required int id,
+    required String token,
+  }) async {
+    final response = await http.get(
+      Uri.parse(_baseUrl + 'user/detail/' + id.toString()),
+      headers: {
+        "token": token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return ProfileResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch detail profile');
     }
   }
 }

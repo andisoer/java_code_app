@@ -73,3 +73,9 @@ Future<String> getUserPin() async {
 
   return pin!;
 }
+
+Future<bool> clearPreferences() async {
+  SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+  await _preferences.init();
+  return _preferences.clearPreferences();
+}

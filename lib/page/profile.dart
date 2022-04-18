@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/page/login_page.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
+import 'package:java_code_app/provider/profile_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -28,12 +30,12 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 16, right: 16),
+                      margin: const EdgeInsets.only(left: 16, right: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(top: 16),
+                            margin: const EdgeInsets.only(top: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -42,13 +44,13 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 16),
+                            margin: const EdgeInsets.only(top: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset('assets/images/identity.png'),
                                 Container(
-                                  margin: EdgeInsets.only(left: 8),
+                                  margin: const EdgeInsets.only(left: 8),
                                   child: Text(
                                     'Verifikasi KTP mu sekarang!',
                                     style: GoogleFonts.montserrat(
@@ -85,7 +87,7 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          _builtOtherInfo(),
+                          _builtOtherInfo(context),
                           _buildLogoutButton(context)
                         ],
                       ),
@@ -100,7 +102,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container _builtOtherInfo() {
+  Container _builtOtherInfo(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -117,78 +119,76 @@ class ProfilePage extends StatelessWidget {
           )
         ],
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Consumer<ProfileProvider>(
+        builder: (context, state, _) {
+          return Column(
             children: [
-              Text(
-                'Device Info',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Iphone 13',
+                    'Device Info',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        state.deviceInfo,
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Version',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
               ),
+              buildHorizontalBorder(),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '1.3',
+                    'Version',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '1.3',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
+              ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -286,237 +286,207 @@ class ProfilePage extends StatelessWidget {
           )
         ],
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Consumer<ProfileProvider>(
+        builder: (context, state, _) {
+          return Column(
             children: [
-              Text(
-                'Nama',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Fajar',
+                    'Nama',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        'Fajar',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Tanggal Lahir',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
               ),
+              buildHorizontalBorder(),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '01/03/1993',
+                    'Tanggal Lahir',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                  )
+                  Row(
+                    children: [
+                      Text(
+                        '01/03/1993',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'No.Telepon',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
+              buildHorizontalBorder(),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '0822-4111-400',
+                    'No.Telepon',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '0822-4111-400',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Email',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
               ),
+              buildHorizontalBorder(),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'lorem.ipsum@gmail.com',
+                    'Email',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        'lorem.ipsum@gmail.com',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Ubah PIN',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
               ),
+              buildHorizontalBorder(),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '*******',
+                    'Ubah PIN',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '*******',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Ganti Bahasa',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+              ),
+              buildHorizontalBorder(),
+              Container(
+                margin: const EdgeInsets.only(bottom: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Ganti Bahasa',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Indonesia',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 4),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
-              Row(
-                children: [
-                  Text(
-                    'Indonesia',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                  )
-                ],
-              )
             ],
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

@@ -24,6 +24,7 @@ import 'package:java_code_app/provider/menu_provider.dart';
 import 'package:java_code_app/provider/order_history_detail_provider.dart';
 import 'package:java_code_app/provider/order_history_provider.dart';
 import 'package:java_code_app/provider/order_provider.dart';
+import 'package:java_code_app/provider/profile_provider.dart';
 import 'package:java_code_app/provider/promo_detail_provider.dart';
 import 'package:java_code_app/provider/promo_provider.dart';
 import 'package:java_code_app/provider/voucher_detail_provider.dart';
@@ -85,6 +86,11 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (_) => OrderHistoryProvider(
+            apiService: ApiService(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileProvider(
             apiService: ApiService(),
           ),
         ),
