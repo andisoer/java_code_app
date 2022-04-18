@@ -65,21 +65,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
               }
             },
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
+         buildHorizontalBorder(),
           _buildVoucherAmountInformation(),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
+          buildHorizontalBorder(),
           _buildPaymentInformation(),
           _buildTotalPaymentInformation()
         ],
