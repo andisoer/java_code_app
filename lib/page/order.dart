@@ -39,15 +39,17 @@ class OrderPage extends StatelessWidget {
               child: ListView.builder(
                 clipBehavior: Clip.none,
                 shrinkWrap: true,
-                physics: const  NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   var menuHistory = state.orderHistoryResult.data[index];
-            
+
                   return buildItemOrderHistory(context, menuHistory);
                 },
                 itemCount: state.orderHistoryResult.data.length,
               ),
             );
+          } else if (state.resourceState == ResourceState.noData) {
+            return const Text('empty');
           } else {
             return const Text('error');
           }

@@ -31,8 +31,6 @@ class OrderHistoryProvider extends ChangeNotifier {
       final data =
           await apiService.fetchOrderHistoryByUser(token: token, id: userId!);
 
-      print(data);
-
       if (data.data.isNotEmpty) {
         _state = ResourceState.hasData;
         notifyListeners();
@@ -42,7 +40,6 @@ class OrderHistoryProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print(e);
       _state = ResourceState.error;
       notifyListeners();
     }

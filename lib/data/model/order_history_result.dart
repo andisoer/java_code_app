@@ -13,12 +13,18 @@ class OrderHistoryResult {
   });
 
   int statusCode;
-  List<MenuOverview> data;
+  List<dynamic> data;
 
   factory OrderHistoryResult.fromJson(Map<String, dynamic> json) =>
       OrderHistoryResult(
         statusCode: json["status_code"],
-        data: List<MenuOverview>.from(json["data"].map((x) => MenuOverview.fromJson(x))),
+        data: json["data"] != null
+            ? List<MenuOverview>.from(
+                json["data"].map(
+                  (x) => MenuOverview.fromJson(x),
+                ),
+              )
+            : List<MenuOverview>.empty(),
       );
 
   Map<String, dynamic> toJson() => {
