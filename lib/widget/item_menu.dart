@@ -38,7 +38,7 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                 Radius.circular(12),
               ),
               image: DecorationImage(
-                  fit: BoxFit.cover, image: NetworkImage(menu.foto)),
+                  fit: BoxFit.cover, image: NetworkImage(menu.foto ?? '')),
             ),
           ),
           Expanded(
@@ -72,7 +72,9 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                         child: Container(
                           margin: const EdgeInsets.only(left: 4),
                           child: Text(
-                            menu.catatan.isNotEmpty ? menu.catatan : 'Tambahkan catatan',
+                            menu.catatan.isNotEmpty
+                                ? menu.catatan
+                                : 'Tambahkan catatan',
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.montserrat(

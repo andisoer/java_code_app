@@ -46,7 +46,7 @@ class Menu {
     String kategori;
     int harga;
     String deskripsi;
-    String foto;
+    String? foto;
     int status;
 
     //Tambah pesanan

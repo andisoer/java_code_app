@@ -98,7 +98,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                     ),
                     width: MediaQuery.of(context).size.width * 2 / 3,
                     child: Image.network(
-                      menu.menu.foto,
+                      menu.menu.foto ?? '',
                     ),
                   ),
                   Container(
