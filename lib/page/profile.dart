@@ -288,175 +288,15 @@ class ProfilePage extends StatelessWidget {
       ),
       child: Consumer<ProfileProvider>(
         builder: (context, state, _) {
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Nama',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Fajar',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              buildHorizontalBorder(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Tanggal Lahir',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '01/03/1993',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              buildHorizontalBorder(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'No.Telepon',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '0822-4111-400',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              buildHorizontalBorder(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Email',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'lorem.ipsum@gmail.com',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              buildHorizontalBorder(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Ubah PIN',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '*******',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              buildHorizontalBorder(),
-              Container(
-                margin: const EdgeInsets.only(bottom: 18),
-                child: Row(
+          if (state.resourceState == ProfileResourceState.success) {
+            var user = state.profileResult.data;
+            return Column(
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Ganti Bahasa',
+                      'Nama',
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -465,7 +305,7 @@ class ProfilePage extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Indonesia',
+                          user.nama ?? '-',
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
@@ -483,9 +323,190 @@ class ProfilePage extends StatelessWidget {
                     )
                   ],
                 ),
+                buildHorizontalBorder(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Tanggal Lahir',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          user.tglLahir ?? '-',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 4),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                buildHorizontalBorder(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'No.Telepon',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          user.telepon ?? '-',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 4),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                buildHorizontalBorder(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Email',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          user.email ?? '-',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 4),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                buildHorizontalBorder(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Ubah PIN',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '*******',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 4),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                buildHorizontalBorder(),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Ganti Bahasa',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Indonesia',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 4),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else if (state.resourceState == ProfileResourceState.error) {
+            return const Expanded(
+              child: Center(
+                child: Text('Failed to fetch'),
               ),
-            ],
-          );
+            );
+          } else if (state.resourceState == ProfileResourceState.loading) {
+            return const Expanded(
+              child: Center(
+                child: Text('loading'),
+              ),
+            );
+          } else {
+            return const Expanded(
+              child: Center(
+                child: Text('Something Wrong'),
+              ),
+            );
+          }
         },
       ),
     );

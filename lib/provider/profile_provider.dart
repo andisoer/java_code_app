@@ -6,7 +6,7 @@ import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
 import 'package:java_code_app/data/model/profile_result.dart';
 
-enum ResourceState { loading, success, error, none }
+enum ProfileResourceState { loading, success, error, none }
 
 class ProfileProvider extends ChangeNotifier {
   final ApiService apiService;
@@ -19,15 +19,15 @@ class ProfileProvider extends ChangeNotifier {
   late ProfileResult _profileResult;
   ProfileResult get profileResult => _profileResult;
 
-  ResourceState _state = ResourceState.none;
-  ResourceState get resourceState => _state;
+  ProfileResourceState _state = ProfileResourceState.none;
+  ProfileResourceState get resourceState => _state;
 
   String _deviceInfo = '-';
   String get deviceInfo => _deviceInfo;
 
   Future<dynamic> fetchUserProfile() async {
     try {
-      _state = ResourceState.loading;
+      _state = ProfileResourceState.loading;
       notifyListeners();
 
       SharedPreferencesUtils _preferences = SharedPreferencesUtils();
@@ -37,15 +37,15 @@ class ProfileProvider extends ChangeNotifier {
 
       final data = await apiService.fetchUserProfile(token: token, id: userId!);
       if (data.statusCode == 200) {
-        _state = ResourceState.success;
+        _state = ProfileResourceState.success;
         notifyListeners();
         return _profileResult = data;
       } else {
-        _state = ResourceState.none;
+        _state = ProfileResourceState.none;
         notifyListeners();
       }
     } catch (e) {
-      _state = ResourceState.error;
+      _state = ProfileResourceState.error;
       notifyListeners();
     }
   }
@@ -58,9 +58,8 @@ class ProfileProvider extends ChangeNotifier {
     if (androidInfo.model != null) {
       androidModel = androidInfo.model!;
     }
- 
+
     _deviceInfo = androidModel;
-    log(_deviceInfo);
     notifyListeners();
     return _deviceInfo;
   }
