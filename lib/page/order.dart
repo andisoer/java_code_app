@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:java_code_app/common/navigation.dart';
-import 'package:java_code_app/data/model/order_history_result.dart';
-import 'package:java_code_app/page/detail_order.dart';
-import 'package:java_code_app/provider/internet_connection_provider.dart';
 import 'package:java_code_app/provider/order_history_provider.dart';
 import 'package:java_code_app/style/colors.dart';
 import 'package:java_code_app/style/style.dart';
 import 'package:java_code_app/widget/item_order_history.dart';
 import 'package:provider/provider.dart';
 
-class OrderPage extends StatelessWidget {
+class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
+
+  @override
+  State<OrderPage> createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
+  var selectedOrderType = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class OrderPage extends StatelessWidget {
           if (state.resourceState == ResourceState.loading) {
             return const Text('loading');
           } else if (state.resourceState == ResourceState.hasData) {
+            var count = state.orderHistoryResult.data.length;
             return SingleChildScrollView(
               child: ListView.builder(
                 clipBehavior: Clip.none,
@@ -45,7 +49,7 @@ class OrderPage extends StatelessWidget {
 
                   return buildItemOrderHistory(context, menuHistory);
                 },
-                itemCount: state.orderHistoryResult.data.length,
+                itemCount: count,
               ),
             );
           } else if (state.resourceState == ResourceState.noData) {
@@ -129,24 +133,55 @@ class OrderPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text(
-            'Sedang Berjalan',
-            style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
+          InkWell(
+            onTap: () {
+              setState(() {
+                selectedOrderType = 1;
+              });
+            },
+            child: Container(
+              decoration: selectedOrderType == 1
+                  ? BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: primaryColor, width: 3),
+                      ),
+                    )
+                  : const BoxDecoration(),
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                'Sedang Berjalan',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: selectedOrderType == 1 ? primaryColor : Colors.black,
+                ),
+              ),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
+          InkWell(
+            onTap: () {
+              setState(() {
+                selectedOrderType = 2;
+              });
+            },
+            child: Container(
+              decoration: selectedOrderType == 2
+                  ? BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: primaryColor, width: 3),
+                      ),
+                    )
+                  : const BoxDecoration(),
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
                 'Riwayat',
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
+                  color: selectedOrderType == 2 ? primaryColor : Colors.black,
                 ),
               ),
-            ],
+            ),
           ),
         ],
       ),

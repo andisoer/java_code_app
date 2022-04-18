@@ -18,6 +18,12 @@ class OrderHistoryProvider extends ChangeNotifier {
   late ResourceState _state;
   ResourceState get resourceState => _state;
 
+  final List<dynamic> _orderHistories = [];
+  List<dynamic> get orderHistories => _orderHistories;
+
+  int offset = 0;
+  int limit = 10;
+
   Future<dynamic> fetchOrderHistory() async {
     try {
       _state = ResourceState.loading;
@@ -34,7 +40,12 @@ class OrderHistoryProvider extends ChangeNotifier {
       if (data.data.isNotEmpty) {
         _state = ResourceState.hasData;
         notifyListeners();
-        return _orderHistoryResult = data;
+
+        _orderHistoryResult = data;
+
+        fetchPagingOrderHistory();
+
+        return _orderHistoryResult;
       } else {
         _state = ResourceState.noData;
         notifyListeners();
@@ -43,5 +54,16 @@ class OrderHistoryProvider extends ChangeNotifier {
       _state = ResourceState.error;
       notifyListeners();
     }
+  }
+
+  void fetchPagingOrderHistory() {
+    var pagedList = _orderHistoryResult.data.getRange(offset, limit - 1);
+
+    _orderHistories.addAll(pagedList);
+
+    offset += 10;
+    limit += 10;
+
+    notifyListeners();
   }
 }
