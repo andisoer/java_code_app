@@ -53,6 +53,7 @@ dependencies:
   date_range_picker: ^1.0.7
   device_info_plus: ^3.2.3
   easy_localization: ^3.0.0
+  image_picker: ^0.8.5
 
 dev_dependencies:
   flutter_test:

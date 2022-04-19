@@ -77,8 +77,6 @@ class ProfileProvider extends ChangeNotifier {
       var token = _preferences.getToken();
       var userId = _preferences.getUserPreferences().idUser;
 
-      print(key + ':' + value);
-
       final data = await apiService.updateProfile(
         token: token,
         id: userId!,
@@ -95,7 +93,38 @@ class ProfileProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print(e);
+      _state = ProfileResourceState.error;
+      notifyListeners();
+    }
+  }
+
+  Future<dynamic> updateProfilePhoto({
+    required String image,
+  }) async {
+    try {
+      _state = ProfileResourceState.loading;
+      notifyListeners();
+
+      SharedPreferencesUtils _preferences = SharedPreferencesUtils();
+      await _preferences.init();
+      var token = _preferences.getToken();
+      var userId = _preferences.getUserPreferences().idUser;
+
+      final data = await apiService.updateProfilePhoto(
+        token: token,
+        id: userId!,
+        image: image,
+      );
+      if (data.statusCode == 200) {
+        _state = ProfileResourceState.success;
+        fetchUserProfile();
+        notifyListeners();
+        return _profileResult = data;
+      } else {
+        _state = ProfileResourceState.none;
+        notifyListeners();
+      }
+    } catch (e) {
       _state = ProfileResourceState.error;
       notifyListeners();
     }

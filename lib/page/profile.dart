@@ -1,8 +1,10 @@
-import 'dart:developer';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/page/login_page.dart';
 import 'package:java_code_app/provider/auth_provider.dart';
 import 'package:java_code_app/provider/profile_provider.dart';
@@ -21,6 +23,8 @@ class _ProfilePageState extends State<ProfilePage> {
   var savedValue = '';
   var selectedLanguageId = 1;
   var selectedLanguage = 'Indonesia';
+
+  var pickedImage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(top: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/circle_profile.png'),
-                              ],
-                            ),
-                          ),
+                          _buildProfilePicture(),
                           Container(
                             margin: const EdgeInsets.only(top: 16),
                             child: Row(
@@ -112,6 +108,84 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Row _buildProfilePicture() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 16),
+          decoration: BoxDecoration(
+            color: primaryColor,
+            shape: BoxShape.circle,
+          ),
+          child: ClipOval(
+            child: SizedBox.fromSize(
+              size: const Size.fromRadius(80),
+              child: Stack(
+                children: [
+                  Consumer<ProfileProvider>(
+                    builder: (context, state, _) {
+                      if (state.resourceState == ProfileResourceState.success) {
+                        var photo = state.profileResult.data.foto;
+                        if (photo != null) {
+                          return Image.network(
+                            photo,
+                            fit: BoxFit.contain,
+                          );
+                        } else {
+                          return Image.asset(
+                            'assets/images/circle_profile.png',
+                          );
+                        }
+                      } else {
+                        return Image.asset(
+                          'assets/images/circle_profile.png',
+                        );
+                      }
+                    },
+                  ),
+                  InkWell(
+                    onTap: () {
+                      changeProfilePicture();
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
+                                color: primaryColor,
+                                child: Text(
+                                  'Ubah',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -930,5 +1004,16 @@ class _ProfilePageState extends State<ProfilePage> {
         selectedLanguageId = 1;
       });
     }
+  }
+
+  void changeProfilePicture() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    List<int> convertedImage = File(image!.path).readAsBytesSync();
+    var base64Image = base64Encode(convertedImage);
+
+    Provider.of<ProfileProvider>(context, listen: false)
+        .updateProfilePhoto(image: base64Image);
   }
 }
