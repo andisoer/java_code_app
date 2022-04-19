@@ -16,6 +16,14 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   var _selectedOrderType = 1;
 
+  var dropdownItems = [
+    'Semua Status',
+    'Selesai',
+    'Dibatalkan',
+  ];
+
+  var _selectedDropdownItem = 'Semua Status';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,14 +87,14 @@ class _OrderPageState extends State<OrderPage> {
           if (state.resourceState == ResourceState.loading) {
             return const Text('loading');
           } else if (state.resourceState == ResourceState.hasData) {
-            var count = state.orderHistory.data.length;
+            var count = state.orderHistoryFiltered.length;
             return SingleChildScrollView(
               child: ListView.builder(
                 clipBehavior: Clip.none,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  var menuHistory = state.orderHistory.data[index];
+                  var menuHistory = state.orderHistoryFiltered[index];
 
                   return buildItemOrderHistory(context, menuHistory);
                 },
@@ -120,14 +128,31 @@ class _OrderPageState extends State<OrderPage> {
             ),
             child: Row(
               children: [
-                Text(
-                  'Semua Status',
-                  style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    isDense: true,
+                    icon: const Icon(Icons.arrow_drop_down),
+                    value: _selectedDropdownItem,
+                    items: dropdownItems.map((item) {
+                      return DropdownMenuItem(
+                        child: Text(
+                          item,
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ),
+                        value: item,
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedDropdownItem = newValue!;
+                      });
+                      Provider.of<OrderHistoryProvider>(context, listen: false).filterOrderHistory(_selectedDropdownItem);
+                    },
                   ),
-                ),
-                const Icon(Icons.arrow_drop_down)
+                )
               ],
             ),
           ),

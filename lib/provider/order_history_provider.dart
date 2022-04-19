@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
 import 'package:java_code_app/data/local/shared_preferences_utils.dart';
@@ -37,7 +39,9 @@ class OrderHistoryProvider extends ChangeNotifier {
   OrderHistoryResult get orderList => _orderList;
 
   late OrderHistoryResult _orderHistory;
-  OrderHistoryResult get orderHistory => _orderHistory;
+  // OrderHistoryResult get orderHistory => _orderHistory;
+
+  List<dynamic> orderHistoryFiltered = [];
 
   late ResourceState _state;
   ResourceState get resourceState => _state;
@@ -66,9 +70,10 @@ class OrderHistoryProvider extends ChangeNotifier {
 
       if (data.data.isNotEmpty) {
         _state = ResourceState.hasData;
-        notifyListeners();
 
         _orderList = data;
+
+        notifyListeners();
 
         // fetchPagingOrderHistory();
 
@@ -100,9 +105,12 @@ class OrderHistoryProvider extends ChangeNotifier {
 
       if (data.data.isNotEmpty) {
         _state = ResourceState.hasData;
-        notifyListeners();
 
         _orderHistory = data;
+
+        orderHistoryFiltered = _orderHistory.data;
+
+        notifyListeners();
 
         return _orderHistory;
       } else {
@@ -115,6 +123,34 @@ class OrderHistoryProvider extends ChangeNotifier {
     }
   }
 
+  void filterOrderHistory(String statusText) {
+    var status = 0;
+    if (statusText == "Selesai") {
+      status = OrderStatus.pickedUp.status;
+    } else if (statusText == "Dibatalkan") {
+      status = OrderStatus.canceled.status;
+    } else {
+      status = 0;
+    }
+
+    if (status == 0) {
+      orderHistoryFiltered = _orderHistory.data;
+      notifyListeners();
+    }
+
+    var filteredOrder = [];
+    if (status != 0) {
+      for (var item in _orderHistory.data) {
+        var menuItem = item as MenuOverview;
+        if (item.status == status) {
+          filteredOrder.add(menuItem);
+        }
+      }
+      orderHistoryFiltered = filteredOrder;
+
+      notifyListeners();
+    }
+  }
   // void fetchPagingOrderHistory() {
   //   var pagedList = _orderList.data.getRange(offset, limit - 1);
 
