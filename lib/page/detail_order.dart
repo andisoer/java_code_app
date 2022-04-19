@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/data/model/menu_result.dart';
@@ -56,7 +57,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'Pesanan kamu sedang disiapkan',
+              'orderIsBeingPrepare'.tr(),
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,

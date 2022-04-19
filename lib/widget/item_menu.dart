@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/common/navigation.dart';
@@ -74,7 +75,7 @@ InkWell buildItemMenu(BuildContext context, Menu menu) {
                           child: Text(
                             menu.catatan.isNotEmpty
                                 ? menu.catatan
-                                : 'Tambahkan catatan',
+                                : 'addNote'.tr(),
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.montserrat(

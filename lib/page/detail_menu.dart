@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/data/model/menu_detail_result.dart';
@@ -256,7 +257,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           ).addMenuCount(menu.menu.idMenu);
         },
         child: Text(
-          "Tambahkan Ke Pesanan",
+          "addToOrder".tr(),
           style: GoogleFonts.montserrat(
             fontWeight: FontWeight.w800,
             fontSize: 14,
@@ -295,7 +296,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           child: Container(
             margin: const EdgeInsets.only(left: 8),
             child: Text(
-              'Harga',
+              'price'.tr(),
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -405,7 +406,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
             children: [
               Consumer<MenuProvider>(
                 builder: (context, state, _) {
-                  var text = 'Pilih Topping';
+                  var text = 'chooseTopping'.tr();
                   var _menu = state.menuResult.data
                       .firstWhere((item) => item.idMenu == menuId);
                   if (_menu.topping != null) {
@@ -420,7 +421,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                     }
 
                     if (_menu.topping!.isEmpty) {
-                      text = 'Pilih Topping';
+                      text = 'chooseTopping'.tr();
                     }
                   }
 
@@ -468,7 +469,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
             child: Container(
               margin: const EdgeInsets.only(left: 8),
               child: Text(
-                'Catatan',
+                'note'.tr(),
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -527,7 +528,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               Container(
                 margin: const EdgeInsets.only(top: 12),
                 child: Text(
-                  'Pilih Level',
+                  'chooseLevel'.tr(),
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -640,7 +641,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               Container(
                 margin: const EdgeInsets.only(top: 12),
                 child: Text(
-                  'Pilih Topping',
+                  'chooseTopping'.tr(),
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -723,7 +724,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               Container(
                 margin: const EdgeInsets.only(top: 12),
                 child: Text(
-                  'Buat Catatan',
+                  'addNote'.tr(),
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,

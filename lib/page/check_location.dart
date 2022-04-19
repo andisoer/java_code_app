@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/page/bottom_navigation_main.dart';
@@ -30,7 +31,7 @@ class _CheckLocationPageState extends State<CheckLocationPage> {
                   child: Column(
                     children: [
                       Text(
-                        'Mencari Lokasimu...',
+                        'searchLocation'.tr(),
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w400,
                           color: const Color.fromARGB(129, 30, 30, 30),

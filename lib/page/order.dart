@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/provider/order_history_provider.dart';
@@ -215,7 +216,7 @@ class _OrderPageState extends State<OrderPage> {
                   : const BoxDecoration(),
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                'Sedang Berjalan',
+                'onGoing'.tr(),
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
@@ -240,7 +241,7 @@ class _OrderPageState extends State<OrderPage> {
                   : const BoxDecoration(),
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                'Riwayat',
+                'history'.tr(),
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,

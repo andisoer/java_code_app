@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/page/login_page.dart';
@@ -16,9 +19,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   var savedValue = '';
+  var selectedLanguageId = 1;
+  var selectedLanguage = 'Indonesia';
 
   @override
   Widget build(BuildContext context) {
+    getLocale();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -59,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Container(
                                   margin: const EdgeInsets.only(left: 8),
                                   child: Text(
-                                    'Verifikasi KTP mu sekarang!',
+                                    'verifyYourIdNow'.tr(),
                                     style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w400,
                                       color: primaryColor,
@@ -73,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: const EdgeInsets.only(top: 16),
                             child: Text(
-                              'Info Akun',
+                              'accountInfo'.tr(),
                               style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
@@ -86,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: const EdgeInsets.only(top: 16),
                             child: Text(
-                              'Info Lainnya',
+                              'otherInfo'.tr(),
                               style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
@@ -134,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Device Info',
+                    'deviceInfo'.tr(),
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -167,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Version',
+                    'version'.tr(),
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -264,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Container(
                 margin: const EdgeInsets.only(left: 8),
                 child: Text(
-                  'Penilaian',
+                  'rating'.tr(),
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -276,7 +282,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ElevatedButton(
             onPressed: () {},
             child: Text(
-              'Nilai Sekarang',
+              'rateNow'.tr(),
               style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
@@ -333,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         return _showBottomSheetUpdateProfile(
                           context,
                           'nama',
-                          'Nama',
+                          'name'.tr(),
                           user.nama ?? '',
                         );
                       },
@@ -343,7 +349,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Nama',
+                        'name'.tr(),
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -382,7 +388,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         return _showBottomSheetUpdateProfile(
                           context,
                           'tgl_lahir',
-                          'Tanggal Lahir',
+                          'birthDate'.tr(),
                           user.tglLahir ?? '',
                         );
                       },
@@ -392,7 +398,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Tanggal Lahir',
+                        'birthDate'.tr(),
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -431,7 +437,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         return _showBottomSheetUpdateProfile(
                           context,
                           'telepon',
-                          'No.Telepon',
+                          'phoneNumner'.tr(),
                           user.telepon ?? '',
                         );
                       },
@@ -441,7 +447,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'No.Telepon',
+                        'phoneNumner'.tr(),
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -524,7 +530,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Ubah PIN',
+                      'changePin'.tr(),
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -555,36 +561,51 @@ class _ProfilePageState extends State<ProfilePage> {
                     margin: const EdgeInsets.symmetric(vertical: 12)),
                 Container(
                   margin: const EdgeInsets.only(bottom: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Ganti Bahasa',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Indonesia',
-                            style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                            ),
+                  child: InkWell(
+                    onTap: () {
+                      showBottomSheet(
+                        elevation: 24,
+                        context: context,
+                        builder: (context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) =>
+                                _showBottomSheetChangeLanguage(
+                                    context, setState),
+                          );
+                        },
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'changeLanguage'.tr(),
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 4),
-                            child: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                              color: Colors.grey,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              selectedLanguage,
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
                             ),
-                          )
-                        ],
-                      )
-                    ],
+                            Container(
+                              margin: const EdgeInsets.only(left: 4),
+                              child: const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -623,7 +644,7 @@ class _ProfilePageState extends State<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Profile',
+            'profile'.tr(),
             style: GoogleFonts.montserrat(
               fontWeight: FontWeight.w600,
               fontSize: 20,
@@ -722,8 +743,192 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Wrap _showBottomSheetChangeLanguage(
+      BuildContext context, StateSetter setState) {
+    return Wrap(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                child: Divider(
+                  indent: MediaQuery.of(context).size.width * 1 / 5,
+                  endIndent: MediaQuery.of(context).size.width * 1 / 5,
+                  height: 2,
+                  thickness: 3,
+                  color: Colors.grey.withAlpha(70),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                child: Text(
+                  'changeLanguage'.tr(),
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedLanguageId = 1;
+                            context.setLocale(const Locale('id', ''));
+                            context.locale;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
+                            color: selectedLanguageId == 1
+                                ? primaryColor
+                                : Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                color: Colors.grey.withAlpha(70),
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset('assets/images/idn_flag.png'),
+                              Container(
+                                margin: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  'Indonesia',
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    color: selectedLanguageId == 1
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 4),
+                                child: Icon(
+                                  Icons.check,
+                                  size: 24,
+                                  color: selectedLanguageId == 1
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedLanguageId = 2;
+                            context.setLocale(const Locale('en', ''));
+                            context.locale;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
+                            color: selectedLanguageId == 2
+                                ? primaryColor
+                                : Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                color: Colors.grey.withAlpha(70),
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset('assets/images/eng_flag.png'),
+                              Container(
+                                margin: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  'Inggris',
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    color: selectedLanguageId == 2
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 4),
+                                child: Icon(
+                                  Icons.check,
+                                  size: 24,
+                                  color: selectedLanguageId == 2
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   void updateProfile(String key, String savedValue) {
     Provider.of<ProfileProvider>(context, listen: false)
         .updateUserProfile(key: key, value: savedValue);
+  }
+
+  void getLocale() {
+    var locale = context.locale;
+    var languageCode = locale.languageCode;
+
+    if (languageCode == 'en') {
+      setState(() {
+        selectedLanguage = 'Inggris';
+        selectedLanguageId = 2;
+      });
+    }
+    if (languageCode == 'id') {
+      setState(() {
+        selectedLanguage = 'Indonesia';
+        selectedLanguageId = 1;
+      });
+    }
   }
 }

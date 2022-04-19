@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/page/bottom_navigation_main.dart';
@@ -151,7 +152,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Total Pembayaran',
+                      'totalPayment'.tr(),
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
@@ -202,7 +203,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 OrderResourceState.success) {
                               pressable = true;
                               widget = Text(
-                                'Pesan Sekarang',
+                                'orderNow'.tr(),
                                 style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -217,7 +218,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 OrderResourceState.error) {
                               pressable = true;
                               widget = Text(
-                                'Pesan Sekarang',
+                                'orderNow'.tr(),
                                 style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -226,7 +227,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             } else {
                               pressable = true;
                               widget = Text(
-                                'Pesan Sekarang',
+                                'orderNow'.tr(),
                                 style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -278,7 +279,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           Container(
             margin: const EdgeInsets.only(left: 8),
             child: Text(
-              'Pembayaran',
+              'payment'.tr(),
               style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w600, fontSize: 16),
             ),
@@ -441,7 +442,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Pesanan',
+            'totalOrder'.tr(),
             style: GoogleFonts.montserrat(
               fontWeight: FontWeight.w600,
               fontSize: 16,

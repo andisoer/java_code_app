@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:java_code_app/data/model/menu_category.dart';
@@ -23,9 +24,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<MenuCategory> categoryList = [
-    MenuCategory('Semua Makanan', 'assets/images/list.png', true, 'all'),
-    MenuCategory('Makanan', 'assets/images/food_white.png', true, 'makanan'),
-    MenuCategory('Minuman', 'assets/images/coffe_white.png', true, 'minuman')
+    MenuCategory('allMenu'.tr(), 'assets/images/list.png', true, 'all'),
+    MenuCategory('food'.tr(), 'assets/images/food_white.png', true, 'makanan'),
+    MenuCategory('drink'.tr(), 'assets/images/coffe_white.png', true, 'minuman')
   ];
 
   int selectedIndex = 0;
@@ -36,31 +37,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              height: 66,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: primaryColor,
-                  ),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(30),
-                  ),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: primaryColor,
-                    ),
-                  ),
-                ),
-              ),
-              decoration: appBarDecoration(context),
-            ),
+            _buildAppBar(context),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
@@ -108,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         margin: const EdgeInsets.only(left: 10),
                                         child: Text(
-                                          'Promo yang tersedia',
+                                          'availablePromo'.tr(),
                                           style: GoogleFonts.montserrat(
                                             fontWeight: FontWeight.w700,
                                             fontSize: 18,
@@ -128,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                                   Container(
                                     margin: const EdgeInsets.only(left: 10),
                                     child: Text(
-                                      'Promo yang tersedia',
+                                      'availablePromo'.tr(),
                                       style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18,
@@ -154,6 +131,34 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Container _buildAppBar(BuildContext context) {
+    return Container(
+      height: 66,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: primaryColor,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(30),
+          ),
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            prefixIcon: Icon(
+              Icons.search,
+              color: primaryColor,
+            ),
+          ),
+        ),
+      ),
+      decoration: appBarDecoration(context),
     );
   }
 
@@ -183,13 +188,17 @@ class _HomePageState extends State<HomePage> {
           }
 
           if (foodMenuList.isNotEmpty) {
-            foodMenuList.insert(0,
-                MenuCategoryItem('Makanan', 'assets/images/food_primary.png'));
+            foodMenuList.insert(
+                0,
+                MenuCategoryItem(
+                    'food'.tr(), 'assets/images/food_primary.png'));
           }
 
           if (drinkMenuList.isNotEmpty) {
-            drinkMenuList.insert(0,
-                MenuCategoryItem('Minuman', 'assets/images/coffe_primary.png'));
+            drinkMenuList.insert(
+                0,
+                MenuCategoryItem(
+                    'drink'.tr(), 'assets/images/coffe_primary.png'));
           }
 
           if (drinkMenuList.isEmpty) {

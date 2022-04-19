@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/common/navigation.dart';
 import 'package:java_code_app/data/api/api_service.dart';
@@ -36,7 +37,14 @@ SharedPreferencesUtils preferences = SharedPreferencesUtils();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await preferences.init();
-  runApp(const MyApp());
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      child: const MyApp(),
+      supportedLocales: [Locale('en', ''), Locale('id', '')],
+      path: 'assets/locales',
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -101,6 +109,9 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         initialRoute: preferences.isLoggedIn()
             ? CheckLocationPage.routeName
             : LoginPage.routeName,

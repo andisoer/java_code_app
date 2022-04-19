@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              'Masuk untuk melanjutkan!',
+                              'loginToContinue'.tr(),
                               style: GoogleFonts.montserrat(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Alamat email',
+                              'emailAddress'.tr(),
                               style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w400,
                               ),
@@ -105,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Kata Sandi',
+                              'password'.tr(),
                               style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w400,
                               ),
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 );
                                 return Text(
-                                  "Masuk",
+                                  "login".tr(),
                                   style: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 14,
@@ -171,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                                 );
                               } else {
                                 return Text(
-                                  "Masuk",
+                                  "login".tr(),
                                   style: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 14,
@@ -214,9 +215,9 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 16),
-                              child: const Text(
-                                "atau",
-                                style: TextStyle(
+                              child: Text(
+                                "or".tr(),
+                                style: const TextStyle(
                                   color: Color.fromARGB(70, 30, 30, 30),
                                 ),
                               ),
@@ -256,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Masuk menggunakan",
+                                    "loginUsing".tr(),
                                     style: GoogleFonts.montserrat(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -309,7 +310,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      "Masuk menggunakan",
+                                      "loginUsing".tr(),
                                       style: GoogleFonts.montserrat(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400),

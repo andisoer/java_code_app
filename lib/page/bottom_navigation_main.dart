@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/page/checkout.dart';
 import 'package:java_code_app/page/home.dart';
@@ -66,15 +67,16 @@ class _BottomNavigationMainState extends State<BottomNavigationMain> {
             onTap: _onItemTapped,
             items: [
               BottomNavigationBarItem(
-                  activeIcon: Image.asset(
-                    'assets/images/home_selected_icon.png',
-                    scale: 1.5,
-                  ),
-                  icon: Image.asset(
-                    'assets/images/home_icon.png',
-                    scale: 1.5,
-                  ),
-                  label: 'Beranda'),
+                activeIcon: Image.asset(
+                  'assets/images/home_selected_icon.png',
+                  scale: 1.5,
+                ),
+                icon: Image.asset(
+                  'assets/images/home_icon.png',
+                  scale: 1.5,
+                ),
+                label: 'home'.tr(),
+              ),
               BottomNavigationBarItem(
                 activeIcon: Image.asset(
                   'assets/images/sajen_selected_icon.png',
@@ -84,7 +86,7 @@ class _BottomNavigationMainState extends State<BottomNavigationMain> {
                   'assets/images/sajen_icon.png',
                   scale: 1.5,
                 ),
-                label: 'Pesanan',
+                label: 'order'.tr(),
               ),
               BottomNavigationBarItem(
                 activeIcon: Image.asset(
@@ -95,7 +97,7 @@ class _BottomNavigationMainState extends State<BottomNavigationMain> {
                   'assets/images/profile_icon.png',
                   scale: 1.5,
                 ),
-                label: 'Profile',
+                label: 'profile'.tr(),
               ),
             ],
           ),
