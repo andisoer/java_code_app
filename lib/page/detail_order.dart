@@ -42,32 +42,17 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
           _buildTotalOrderInformation(),
           Column(
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                child: const Divider(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-              ),
+              buildHorizontalBorder(
+                  margin: const EdgeInsets.symmetric(vertical: 12)),
               _buildDiscountAmountInformation(context)
             ],
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
+          buildHorizontalBorder(
+              margin: const EdgeInsets.symmetric(vertical: 12)),
           _buildVoucherAmountInformation(),
           _buildPaymentInformation(),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            child: const Divider(
-              height: 2,
-              color: Colors.grey,
-            ),
-          ),
+          buildHorizontalBorder(
+              margin: const EdgeInsets.symmetric(vertical: 12)),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(

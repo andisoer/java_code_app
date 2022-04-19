@@ -34,12 +34,12 @@ BoxDecoration cardDecoration() {
   );
 }
 
-Container buildHorizontalBorder() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
-      child: const Divider(
-        height: 2,
-        color: Colors.grey,
-      ),
-    );
-  }
+Container buildHorizontalBorder({required EdgeInsets margin}) {
+  return Container(
+    margin: margin,
+    child: const Divider(
+      height: 2,
+      color: Colors.grey,
+    ),
+  );
+}

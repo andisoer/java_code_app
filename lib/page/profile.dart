@@ -161,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ],
               ),
-              buildHorizontalBorder(),
+              buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -346,7 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(),
+                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
                 InkWell(
                   onTap: () {
                     showBottomSheet(
@@ -394,7 +394,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(),
+                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
                 InkWell(
                   onTap: () {
                     showBottomSheet(
@@ -442,7 +442,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(),
+                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
                 InkWell(
                   onTap: () {
                     showBottomSheet(
@@ -490,7 +490,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(),
+                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -522,7 +522,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   ],
                 ),
-                buildHorizontalBorder(),
+                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
                 Container(
                   margin: const EdgeInsets.only(bottom: 18),
                   child: Row(

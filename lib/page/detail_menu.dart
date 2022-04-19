@@ -201,47 +201,22 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             ],
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        buildHorizontalBorder(
+                            margin: const EdgeInsets.symmetric(vertical: 16)),
                         _buildMoneyInformation(menu),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        buildHorizontalBorder(
+                            margin: const EdgeInsets.symmetric(vertical: 16)),
                         _builtLevelInformation(
                             context, menu.level, menu.menu.idMenu),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        buildHorizontalBorder(
+                            margin: const EdgeInsets.symmetric(vertical: 16)),
                         _builtToppingInformation(
                             context, menu.topping, menu.menu.idMenu),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        buildHorizontalBorder(
+                            margin: const EdgeInsets.symmetric(vertical: 16)),
                         _builtNoteInformation(context, menu.menu),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        buildHorizontalBorder(
+                            margin: const EdgeInsets.symmetric(vertical: 16)),
                         _updateButtonAddOrder(menu),
                       ],
                     ),

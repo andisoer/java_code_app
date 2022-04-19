@@ -202,13 +202,7 @@ class _DetailPromoPageState extends State<DetailPromoPage> {
                             ),
                           ],
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 16)),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

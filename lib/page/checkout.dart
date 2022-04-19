@@ -65,9 +65,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
               }
             },
           ),
-         buildHorizontalBorder(),
+          buildHorizontalBorder(
+              margin: const EdgeInsets.symmetric(vertical: 12)),
           _buildVoucherAmountInformation(),
-          buildHorizontalBorder(),
+          buildHorizontalBorder(
+              margin: const EdgeInsets.symmetric(vertical: 12)),
           _buildPaymentInformation(),
           _buildTotalPaymentInformation()
         ],

@@ -69,9 +69,9 @@ class OrderHistoryProvider extends ChangeNotifier {
       );
 
       if (data.data.isNotEmpty) {
-        _state = ResourceState.hasData;
-
         _orderList = data;
+
+        _state = ResourceState.hasData;
 
         notifyListeners();
 
