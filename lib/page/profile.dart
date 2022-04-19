@@ -161,7 +161,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ],
               ),
-              buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
+              buildHorizontalBorder(
+                  margin: const EdgeInsets.symmetric(vertical: 12)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -239,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Container _buildRatingInfo() {
     return Container(
       margin: const EdgeInsets.only(top: 18),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
           Radius.circular(20),
@@ -257,6 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset('assets/images/bubble_rating.png'),
               Container(
@@ -270,6 +272,29 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ],
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              'Nilai Sekarang',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(24),
+                ),
+              ),
+              primary: primaryColor,
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              side: const BorderSide(
+                color: Colors.white,
+                width: 1,
+              ),
+            ),
           ),
         ],
       ),
@@ -346,7 +371,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
+                buildHorizontalBorder(
+                    margin: const EdgeInsets.symmetric(vertical: 12)),
                 InkWell(
                   onTap: () {
                     showBottomSheet(
@@ -394,7 +420,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
+                buildHorizontalBorder(
+                    margin: const EdgeInsets.symmetric(vertical: 12)),
                 InkWell(
                   onTap: () {
                     showBottomSheet(
@@ -442,7 +469,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
+                buildHorizontalBorder(
+                    margin: const EdgeInsets.symmetric(vertical: 12)),
                 InkWell(
                   onTap: () {
                     showBottomSheet(
@@ -490,7 +518,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
+                buildHorizontalBorder(
+                    margin: const EdgeInsets.symmetric(vertical: 12)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -522,7 +551,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   ],
                 ),
-                buildHorizontalBorder(margin: const EdgeInsets.symmetric(vertical: 12)),
+                buildHorizontalBorder(
+                    margin: const EdgeInsets.symmetric(vertical: 12)),
                 Container(
                   margin: const EdgeInsets.only(bottom: 18),
                   child: Row(
