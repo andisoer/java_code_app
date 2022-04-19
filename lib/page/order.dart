@@ -14,7 +14,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  var selectedOrderType = 1;
+  var _selectedOrderType = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -23,29 +23,70 @@ class _OrderPageState extends State<OrderPage> {
         child: Column(
           children: [
             _buildAppBar(context),
-            _buildFilter(),
-            _buildOrderHistoryList(),
+            Visibility(
+              visible: _selectedOrderType == 2 ? true : false,
+              child: _buildFilter(),
+            ),
+            Visibility(
+              visible: _selectedOrderType == 1 ? true : false,
+              child: _buildOrderList(),
+            ),
+            Visibility(
+              visible: _selectedOrderType == 2 ? true : false,
+              child: _buildOrderHistory(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Expanded _buildOrderHistoryList() {
+  Expanded _buildOrderList() {
     return Expanded(
       child: Consumer<OrderHistoryProvider>(
         builder: (context, state, _) {
           if (state.resourceState == ResourceState.loading) {
             return const Text('loading');
           } else if (state.resourceState == ResourceState.hasData) {
-            var count = state.orderHistoryResult.data.length;
+            var count = state.orderList.data.length;
             return SingleChildScrollView(
               child: ListView.builder(
                 clipBehavior: Clip.none,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  var menuHistory = state.orderHistoryResult.data[index];
+                  var menuHistory = state.orderList.data[index];
+
+                  return buildItemOrderHistory(context, menuHistory);
+                },
+                itemCount: count,
+              ),
+            );
+          } else if (state.resourceState == ResourceState.noData) {
+            return const Text('empty');
+          } else {
+            return const Text('error');
+          }
+        },
+      ),
+    );
+  }
+
+  Expanded _buildOrderHistory() {
+    return Expanded(
+      child: Consumer<OrderHistoryProvider>(
+        builder: (context, state, _) {
+          if (state.resourceState == ResourceState.loading) {
+            return const Text('loading');
+          } else if (state.resourceState == ResourceState.hasData) {
+            var count = state.orderHistory.data.length;
+            return SingleChildScrollView(
+              child: ListView.builder(
+                clipBehavior: Clip.none,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  var menuHistory = state.orderHistory.data[index];
 
                   return buildItemOrderHistory(context, menuHistory);
                 },
@@ -136,11 +177,11 @@ class _OrderPageState extends State<OrderPage> {
           InkWell(
             onTap: () {
               setState(() {
-                selectedOrderType = 1;
+                _selectedOrderType = 1;
               });
             },
             child: Container(
-              decoration: selectedOrderType == 1
+              decoration: _selectedOrderType == 1
                   ? BoxDecoration(
                       border: Border(
                         bottom: BorderSide(color: primaryColor, width: 3),
@@ -153,7 +194,7 @@ class _OrderPageState extends State<OrderPage> {
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
-                  color: selectedOrderType == 1 ? primaryColor : Colors.black,
+                  color: _selectedOrderType == 1 ? primaryColor : Colors.black,
                 ),
               ),
             ),
@@ -161,11 +202,11 @@ class _OrderPageState extends State<OrderPage> {
           InkWell(
             onTap: () {
               setState(() {
-                selectedOrderType = 2;
+                _selectedOrderType = 2;
               });
             },
             child: Container(
-              decoration: selectedOrderType == 2
+              decoration: _selectedOrderType == 2
                   ? BoxDecoration(
                       border: Border(
                         bottom: BorderSide(color: primaryColor, width: 3),
@@ -178,7 +219,7 @@ class _OrderPageState extends State<OrderPage> {
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
-                  color: selectedOrderType == 2 ? primaryColor : Colors.black,
+                  color: _selectedOrderType == 2 ? primaryColor : Colors.black,
                 ),
               ),
             ),

@@ -225,12 +225,35 @@ class ApiService {
     }
   }
 
-  Future<OrderHistoryResult> fetchOrderHistoryByUser({
+  Future<OrderHistoryResult> fetchOrderListByUserAndStatus({
+    required int id,
+    required String token,
+    required int status,
+  }) async {
+    final response = await http.get(
+      Uri.parse(
+        _baseUrl + 'order/status/' + id.toString() + '/' + status.toString(),
+      ),
+      headers: {
+        "token": token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return OrderHistoryResult.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch order histories');
+    }
+  }
+
+  Future<OrderHistoryResult> fetchOrderHistory({
     required int id,
     required String token,
   }) async {
     final response = await http.get(
-      Uri.parse(_baseUrl + 'order/user/' + id.toString()),
+      Uri.parse(
+        _baseUrl + 'order/history/' + id.toString(),
+      ),
       headers: {
         "token": token,
       },
